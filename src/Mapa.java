@@ -83,9 +83,9 @@ public class Mapa {
                 });
 
                 if (isPlayerTerritory(i, j, difficulty)) {
-                    cell.setBackground(Color.RED); // území hráče
+                    cell.setBackground(Color.GREEN); // území hráče
                 } else if (isOpponentTerritory(i, j, difficulty)) {
-                    cell.setBackground(Color.GREEN); // území protihráče
+                    cell.setBackground(Color.RED); // území protihráče
                 } else {
                     cell.setBackground(Color.WHITE); // neutrální území
                 }
@@ -117,58 +117,70 @@ public class Mapa {
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(titleLabel);
 
-        // Celkové zdroje
-        JLabel resourcesLabel = new JLabel(getTotalResourcesInfo(difficulty));
-        resourcesLabel.setHorizontalAlignment(JLabel.CENTER);
-        infoPanel.add(resourcesLabel);
-
-        // Obrana území
-        JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-        defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-        infoPanel.add(defenseLabel);
-
-        // Tlačítko pro útok
-        JButton attackButton = new JButton("Útok");
-        attackButton.setEnabled(isAttackAllowed(difficulty, cell));
-        attackButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Logika pro útok na území
-                // TODO: Implementovat
-            }
-        });
-        infoPanel.add(attackButton);
+        // Obrázek a informace o územích
+        if (cell.getBackground().equals(Color.RED)) {
+            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: 1");
+            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(buildingLevelLabel);
+            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(defenseLabel);
+            JButton attackButton = new JButton("Útok");
+            attackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Logika pro útok na území
+                }
+            });
+            infoPanel.add(attackButton);
+        } else if (cell.getBackground().equals(Color.WHITE)) {
+            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(defenseLabel);
+            JButton attackButton = new JButton("Útok");
+            attackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Logika pro útok na území
+                }
+            });
+            infoPanel.add(attackButton);
+        } else if (cell.getBackground().equals(Color.GREEN)) {
+            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: 1");
+            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(buildingLevelLabel);
+            JLabel earningLabel = new JLabel("Příjem: 50 peněz, 50 surovin, 10 armády");
+            earningLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(earningLabel);
+            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(defenseLabel);
+            JButton upgradeButton = new JButton("Vylepšit budovu");
+            upgradeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Logika pro vylepšení budovy
+                }
+            });
+            infoPanel.add(upgradeButton);
+        }
 
         infoFrame.add(infoPanel);
         infoFrame.setVisible(true);
     }
 
-    private static String getTotalResourcesInfo(int difficulty) {
-        switch (difficulty) {
-            case EASY:
-                return "Peníze: 400, Suroviny: 400, Armáda: 200";
-            case MEDIUM:
-                return "Peníze: 400, Suroviny: 400, Armáda: 200";
-            case HARD:
-                return "Peníze: 200, Suroviny: 200, Armáda: 100";
-            default:
-                return "";
-        }
-    }
-
     private static int getTerritoryDefense(int difficulty) {
-        switch (difficulty) {
-            case EASY:
-                return 75;
-            case MEDIUM:
-                return 75;
-            case HARD:
-                return 50;
-            default:
-                return 0;
+        if (difficulty == EASY) {
+            return 50;
+        } else if (difficulty == MEDIUM) {
+            return 75;
+        } else if (difficulty == HARD) {
+            return 100;
         }
+        return 0;
     }
 
-    private static boolean isPlayerTerritory(int i, int j, int difficulty) {
+    private static boolean isOpponentTerritory(int i, int j, int difficulty) {
         if (difficulty == EASY) {
             return (i == 0 && (j == 5 || j == 4));
         } else if (difficulty == MEDIUM) {
@@ -179,7 +191,7 @@ public class Mapa {
         return false;
     }
 
-    private static boolean isOpponentTerritory(int i, int j, int difficulty) {
+    private static boolean isPlayerTerritory(int i, int j, int difficulty) {
         if (difficulty == EASY) {
             return (i == 9 && (j == 4 || j == 5 || j == 6 || j == 3));
         } else if (difficulty == MEDIUM) {
@@ -188,11 +200,5 @@ public class Mapa {
             return (i == 9 && (j == 4 || j == 5));
         }
         return false;
-    }
-
-    private static boolean isAttackAllowed(int difficulty, JPanel cell) {
-        // Implementace podle obtížnosti a umístění buňky
-        // TODO: Implementovat
-        return true;
     }
 }
