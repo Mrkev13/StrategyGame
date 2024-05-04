@@ -2,12 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Mapa {
-    private static final int EASY = 1;
-    private static final int MEDIUM = 2;
-    private static final int HARD = 3;
+public class Mapa{
 
-    private static int currentDifficulty = MEDIUM; // Výchozí obtížnost
+    public static final int EASY = 1;
+    public static final int MEDIUM = 2;
+    public static final int HARD = 3;
+
+    public static int currentDifficulty = MEDIUM; // Výchozí obtížnost
+
+    private static Player player = new Player(); // Hráč
+    private static int opponentMoves = 0; // Počet tahů protihráče
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -57,6 +61,8 @@ public class Mapa {
         });
 
         frame.getContentPane().add(controlPanel, BorderLayout.WEST);
+
+
         frame.setVisible(true);
     }
 
@@ -100,6 +106,31 @@ public class Mapa {
         contentPane.add(gamePanel, BorderLayout.WEST);
 
         frame.pack();
+        frame.setVisible(true);
+
+
+        // Panel pro zobrazení informací o hráči
+        JPanel playerInfoPanel = new JPanel();
+        playerInfoPanel.setLayout(new GridLayout(6, 1));
+        JLabel moneyLabel = new JLabel("Peníze: " + player.getMoney());
+        JLabel resourcesLabel = new JLabel("Suroviny: " + player.getResources());
+        JLabel armyLabel = new JLabel("Armáda: " + player.getArmy());
+        JLabel opponentMovesLabel = new JLabel("Tahy protihráče: " + opponentMoves);
+        JButton endTurnButton = new JButton("Ukončit kolo");
+        endTurnButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                endTurn();
+            }
+        });
+        JLabel tipsLabel = new JLabel("Rady a typy: ");
+        playerInfoPanel.add(moneyLabel);
+        playerInfoPanel.add(resourcesLabel);
+        playerInfoPanel.add(armyLabel);
+        playerInfoPanel.add(opponentMovesLabel);
+        playerInfoPanel.add(endTurnButton);
+        playerInfoPanel.add(tipsLabel);
+        frame.getContentPane().add(playerInfoPanel, BorderLayout.EAST);
+
         frame.setVisible(true);
     }
 
@@ -165,6 +196,7 @@ public class Mapa {
             infoPanel.add(upgradeButton);
         }
 
+
         infoFrame.add(infoPanel);
         infoFrame.setVisible(true);
     }
@@ -200,5 +232,13 @@ public class Mapa {
             return (i == 9 && (j == 4 || j == 5));
         }
         return false;
+    }
+
+
+    // Metoda pro ukončení kola
+    private static void endTurn() {
+        // Zde by se prováděly operace spojené s ukončením kola, například resetování hodnot, tahy protihráče atd.
+        opponentMoves++;
+        System.out.println("Kolo ukončeno. Tahy protihráče: " + opponentMoves);
     }
 }
