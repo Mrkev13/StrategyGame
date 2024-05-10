@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Mapa{
+public class Mapa  {
 
     public static final int EASY = 1;
     public static final int MEDIUM = 2;
@@ -62,21 +62,8 @@ public class Mapa{
 
         frame.getContentPane().add(controlPanel, BorderLayout.WEST);
 
-        // Panel pro uvod, pravidla a seznam akcí hráče
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(3, 1));
-
-        JLabel introLabel = new JLabel("<html><b>Úvod:</b><br>Vítejte v naší hře! Cílem hry je ... [popis cíle hry]<br><br><b>Pravidla:</b><br>1. ... [pravidlo 1]<br>2. ... [pravidlo 2]<br>3. ... [pravidlo 3]</html>");
-        JLabel actionsLabel = new JLabel("<html><b>Rady a typy:</b><br>- Můžete vylepšit kolik budov chcete.<br>- Můžete zautocit maximalne na 5 neutralnich a nepratelskych policek.<br>- Můžete zkusit sjednat mirovou smlouvu (čím více máte polic na mapě, tím větší máte šanci na úspěch).</html>");
-
-        mainPanel.add(introLabel);
-        mainPanel.add(actionsLabel);
-
-        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-
         frame.setVisible(true);
     }
-
 
     private static void createAndShowGamePanel(int difficulty) {
         JFrame frame = new JFrame("Hra");
@@ -134,12 +121,14 @@ public class Mapa{
                 endTurn();
             }
         });
+        JLabel tipsLabel = new JLabel("Rady a typy: ");
         playerInfoPanel.add(moneyLabel);
         playerInfoPanel.add(resourcesLabel);
         playerInfoPanel.add(armyLabel);
         playerInfoPanel.add(opponentMovesLabel);
         playerInfoPanel.add(endTurnButton);
-        frame.getContentPane().add(playerInfoPanel, BorderLayout.EAST);
+        playerInfoPanel.add(tipsLabel);
+        contentPane.add(playerInfoPanel, BorderLayout.EAST);
 
         frame.setVisible(true);
     }
@@ -170,7 +159,7 @@ public class Mapa{
             attackButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Logika pro útok na území
+                    Attack.attack(cell); // Volání metody útoku
                 }
             });
             infoPanel.add(attackButton);
@@ -182,7 +171,7 @@ public class Mapa{
             attackButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Logika pro útok na území
+                    Attack.attack(cell); // Volání metody útoku
                 }
             });
             infoPanel.add(attackButton);
@@ -205,7 +194,6 @@ public class Mapa{
             });
             infoPanel.add(upgradeButton);
         }
-
 
         infoFrame.add(infoPanel);
         infoFrame.setVisible(true);
@@ -244,11 +232,18 @@ public class Mapa{
         return false;
     }
 
-
     // Metoda pro ukončení kola
     private static void endTurn() {
         // Zde by se prováděly operace spojené s ukončením kola, například resetování hodnot, tahy protihráče atd.
         opponentMoves++;
         System.out.println("Kolo ukončeno. Tahy protihráče: " + opponentMoves);
+    }
+
+    // Vnitřní třída pro útok
+    private static class Attack {
+        public static void attack(JPanel territoryPanel) {
+            // Zde implementujte logiku útoku
+            territoryPanel.setBackground(Color.GREEN); // Změna barvy území na zelenou po úspěšném útoku
+        }
     }
 }
