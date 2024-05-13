@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Attack {
     // Metoda pro provedení útoku
-    public void attack(JPanel territoryPanel, Player player, int defense) {
+    public static void attack(JPanel territoryPanel, Player player, int defense) {
         // Pokud hráč má dostatečnou armádu na provedení útoku
         if (player.getArmy() >= defense) {
             // Odebrat obranu z armády hráče

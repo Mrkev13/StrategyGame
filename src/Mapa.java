@@ -12,7 +12,7 @@ public class Mapa {
 
     private static Player player = new Player(); // Hráč
     private static int opponentMoves = 0; // Počet tahů protihráče
-    private static Attack attack = new Attack(); // Instance třídy Attack
+    private static BuildingUpgrader buildingUpgrader = new BuildingUpgrader(); // Instance třídy BuildingUpgrader
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -172,7 +172,7 @@ public class Mapa {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Při útoku předávejte aktuální hodnotu armády hráče a odpovídající label
-                    attack.attack(cell, player, getTerritoryDefense(difficulty));
+                    Attack.attack(cell, player, getTerritoryDefense(difficulty));
                 }
             });
             infoPanel.add(attackButton);
@@ -185,7 +185,7 @@ public class Mapa {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Při útoku se aktualizuje armáda
-                    attack.attack(cell, player, getTerritoryDefense(difficulty));
+                    Attack.attack(cell, player, getTerritoryDefense(difficulty));
 
                 }
             });
@@ -204,7 +204,8 @@ public class Mapa {
             upgradeButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Logika pro vylepšení budovy
+                    // Metoda pro vylepšení budovy
+                    buildingUpgrader.upgradeBuilding(player, cell);
                 }
             });
             infoPanel.add(upgradeButton);
@@ -255,6 +256,4 @@ public class Mapa {
         opponentMoves++;
         System.out.println("Kolo ukončeno. Tahy protihráče: " + opponentMoves);
     }
-
-
 }
