@@ -35,4 +35,15 @@ public class Player {
             return army;
         }
 
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public void setResources(int resources) {
+        this.resources = resources;
+    }
+
+    public void setArmy(int army) {
+        this.army = army;
+    }
 }

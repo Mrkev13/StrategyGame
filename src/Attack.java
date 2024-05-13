@@ -3,17 +3,15 @@ import java.awt.*;
 
 public class Attack {
     // Metoda pro provedení útoku
-    public static void attack(JPanel territoryPanel, int army, int defense) {
+    public void attack(JPanel territoryPanel, Player player, int defense) {
         // Pokud hráč má dostatečnou armádu na provedení útoku
-        if (army >= defense) {
+        if (player.getArmy() >= defense) {
             // Odebrat obranu z armády hráče
-            army -= defense;
+            player.setArmy(player.getArmy() - defense);
 
             // Změna barvy území na zelenou (úspěšný útok)
             territoryPanel.setBackground(Color.GREEN);
         } else {
-            // Změna barvy území na červenou (neúspěšný útok)
-            territoryPanel.setBackground(Color.RED);
             // Zobrazení upozornění o nedostatečné armádě pro útok
             JOptionPane.showMessageDialog(null, "Nemáte dostatečnou armádu pro útok!", "Upozornění", JOptionPane.WARNING_MESSAGE);
         }
