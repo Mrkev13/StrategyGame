@@ -15,11 +15,11 @@ class BuildingUpgrader {
         if (currentLevel < MAX_BUILDING_LEVEL) {
             int upgradeCost = getUpgradeCost(currentLevel);
             int armyCost = getUpgradeArmyCost(currentLevel);
-            int resourceCost = getUpgradeResourceCost(currentLevel); // Přidáno
-            if (player.getMoney() >= upgradeCost && player.getArmy() >= armyCost && player.getResources() >= resourceCost) { // Upraveno
+            int resourceCost = getUpgradeResourceCost(currentLevel);
+            if (player.getMoney() >= upgradeCost && player.getArmy() >= armyCost && player.getResources() >= resourceCost) {
                 player.setMoney(player.getMoney() - upgradeCost);
                 player.setArmy(player.getArmy() - armyCost);
-                player.setResources(player.getResources() - resourceCost); // Přidáno
+                player.setResources(player.getResources() - resourceCost);
                 setBuildingLevel(cell, currentLevel + 1);
                 JOptionPane.showMessageDialog(null, "Budova byla úspěšně vylepšena.");
             } else {
@@ -32,15 +32,20 @@ class BuildingUpgrader {
 
 
     public static int getBuildingLevel(JPanel cell) {
-        // Implementace získání úrovně budovy z buňky
-
-        return 1;
+        // Získání úrovně budovy z buňky
+        if (cell.getClientProperty("BuildingLevel") != null) {
+            return (int) cell.getClientProperty("BuildingLevel");
+        } else {
+            // Pokud není nastavena žádná úroveň, vraťte výchozí hodnotu (například 1)
+            return 1;
+        }
     }
 
     public static void setBuildingLevel(JPanel cell, int level) {
-        // Implementace nastavení úrovně budovy do buňky
-
+        // Nastavení úrovně budovy do buňky
+        cell.putClientProperty("BuildingLevel", level);
     }
+
 
     public static int getUpgradeCost(int currentLevel) {
         if (currentLevel == 1) {

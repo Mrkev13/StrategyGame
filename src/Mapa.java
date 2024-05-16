@@ -166,66 +166,76 @@ public class Mapa {
         opponentMovesLabel.setText("Tahy protihráče: " + opponentMoves);
     }
 
-    // Metoda pro zobrazení informací o území
+
     private static void displayTerritoryInfo(JPanel cell, int difficulty) {
-        JFrame infoFrame = new JFrame("Informace o území");
-        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        infoFrame.setSize(300, 200);
-        infoFrame.setLocationRelativeTo(cell);
+           JFrame infoFrame = new JFrame("Informace o území");
+           infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+           infoFrame.setSize(300, 200);
+           infoFrame.setLocationRelativeTo(cell);
 
-        JPanel infoPanel = new JPanel(new GridLayout(5, 1));
+           JPanel infoPanel = new JPanel(new GridLayout(6, 1));
 
-        // Nadpis informace o území
-        JLabel titleLabel = new JLabel("Informace o území");
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        infoPanel.add(titleLabel);
+           // Nadpis informace o území
+           JLabel titleLabel = new JLabel("Informace o území");
+           titleLabel.setHorizontalAlignment(JLabel.CENTER);
+           infoPanel.add(titleLabel);
 
-        // Obrázek a informace o územích
-        if (cell.getBackground().equals(Color.RED)) {
-            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(defenseLabel);
-            JButton attackButton = new JButton("Útok");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Při útoku předávajte aktuální hodnotu obrany území
-                    Attack.attack(cell, player, getTerritoryDefense(difficulty));
-                    // Aktualizace informací o hráči po provedení útoku
-                    updatePlayerInfoPanel(playerInfoPanel, player);
-                    // Zavření okna s informacemi o území
-                    infoFrame.dispose();
-                }
-            });
-            infoPanel.add(attackButton);
-        } else if (cell.getBackground().equals(Color.WHITE)) {
-            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(defenseLabel);
-            JButton attackButton = new JButton("Útok");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Při útoku předávajte aktuální hodnotu obrany území
-                    Attack.attack(cell, player, getTerritoryDefense(difficulty));
-                    // Aktualizace informací o hráči po provedení útoku
-                    updatePlayerInfoPanel(playerInfoPanel, player);
-                    // Zavření okna s informacemi o území
-                    infoFrame.dispose();
-                }
-            });
-            infoPanel.add(attackButton);
+           // Obrázek a informace o územích
+           if (cell.getBackground().equals(Color.RED)) {
+               JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+               defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+               infoPanel.add(defenseLabel);
+               JButton attackButton = new JButton("Útok");
+               attackButton.addActionListener(new ActionListener() {
+                   @Override
+                   public void actionPerformed(ActionEvent e) {
+                       // Při útoku předávajte aktuální hodnotu obrany území
+                       Attack.attack(cell, player, getTerritoryDefense(difficulty));
+                       // Aktualizace informací o hráči po provedení útoku
+                       updatePlayerInfoPanel(playerInfoPanel, player);
+                       // Zavření okna s informacemi o území
+                       infoFrame.dispose();
+                   }
+               });
+               infoPanel.add(attackButton);
+           } else if (cell.getBackground().equals(Color.WHITE)) {
+               JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+               defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+               infoPanel.add(defenseLabel);
+               JButton attackButton = new JButton("Útok");
+               attackButton.addActionListener(new ActionListener() {
+                   @Override
+                   public void actionPerformed(ActionEvent e) {
+                       // Při útoku předávajte aktuální hodnotu obrany území
+                       Attack.attack(cell, player, getTerritoryDefense(difficulty));
+                       // Aktualizace informací o hráči po provedení útoku
+                       updatePlayerInfoPanel(playerInfoPanel, player);
+                       // Zavření okna s informacemi o území
+                       infoFrame.dispose();
+                   }
+               });
+               infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.GREEN)) {
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: 1");
+            // Pokud je to hráčovo území, zobrazí se úroveň budovy, příjem, obrana a tlačítko na vylepšení
+            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgrader.getBuildingLevel(cell));
             buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(buildingLevelLabel);
-            JLabel earningLabel = new JLabel("Příjem: 50 peněz, 50 surovin, 10 armády");
+
+            int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
+            int[] earnings = getTerritoryEarning(buildingLevel, difficulty);
+            JLabel earningLabel = new JLabel("Příjem: " + earnings[0] + " peněz, " + earnings[1] + " surovin, " + earnings[2] + " armády");
             earningLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(earningLabel);
+
             JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
-            JButton upgradeButton = new JButton("Vylepšit budovu");
+
+            JLabel upgradeCostLabel = new JLabel("Cena vylepšení: " + BuildingUpgrader.getUpgradeCost(BuildingUpgrader.getBuildingLevel(cell))+ " peněz, " + BuildingUpgrader.getUpgradeResourceCost(BuildingUpgrader.getBuildingLevel(cell)) + " surovin, " + BuildingUpgrader.getUpgradeArmyCost(BuildingUpgrader.getBuildingLevel(cell)) + " armády");
+            upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(upgradeCostLabel);
+
+            JButton upgradeButton = new JButton("Vylepšit");
             upgradeButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -242,6 +252,36 @@ public class Mapa {
 
         infoFrame.add(infoPanel);
         infoFrame.setVisible(true);
+    }
+
+    private static int[] getTerritoryEarning(int buildingLevel, int difficulty) {
+        int[] earnings = new int[3];
+        if (buildingLevel == 1) {
+            if (difficulty == EASY) {
+                earnings = new int[]{50, 50, 10}; // Úroveň 1 na lehké obtížnosti
+            } else if (difficulty == MEDIUM) {
+                earnings = new int[]{25, 25, 5}; // Úroveň 1 na střední obtížnosti
+            } else if (difficulty == HARD) {
+                earnings = new int[]{25, 25, 5}; // Úroveň 1 na těžké obtížnosti
+            }
+        } else if (buildingLevel == 2) {
+            if (difficulty == EASY) {
+                earnings = new int[]{60, 60, 20}; // Úroveň 2 na lehké obtížnosti
+            } else if (difficulty == MEDIUM) {
+                earnings = new int[]{30, 30, 15}; // Úroveň 2 na střední obtížnosti
+            } else if (difficulty == HARD) {
+                earnings = new int[]{30, 30, 15}; // Úroveň 2 na těžké obtížnosti
+            }
+        } else if (buildingLevel == 3) {
+            if (difficulty == EASY) {
+                earnings = new int[]{75, 75, 30}; // Úroveň 3 na lehké obtížnosti
+            } else if (difficulty == MEDIUM) {
+                earnings = new int[]{40, 40, 25}; // Úroveň 3 na střední obtížnosti
+            } else if (difficulty == HARD) {
+                earnings = new int[]{40, 40, 25}; // Úroveň 3 na těžké obtížnosti
+            }
+        }
+        return earnings;
     }
 
 
