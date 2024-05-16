@@ -43,21 +43,24 @@ public class Mapa {
         easyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 currentDifficulty = EASY;
-                createAndShowGamePanel(currentDifficulty);
+                frame.dispose(); // Zavřít okno s volbou obtížnosti
+                createAndShowGamePanel(currentDifficulty); // Otevřít nové okno s herním panelem
             }
         });
 
         mediumButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 currentDifficulty = MEDIUM;
-                createAndShowGamePanel(currentDifficulty);
+                frame.dispose(); // Zavřít okno s volbou obtížnosti
+                createAndShowGamePanel(currentDifficulty); // Otevřít nové okno s herním panelem
             }
         });
 
         hardButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 currentDifficulty = HARD;
-                createAndShowGamePanel(currentDifficulty);
+                frame.dispose(); // Zavřít okno s volbou obtížnosti
+                createAndShowGamePanel(currentDifficulty); // Otevřít nové okno s herním panelem
             }
         });
 
@@ -75,6 +78,7 @@ public class Mapa {
 
         frame.setVisible(true);
     }
+
 
     private static void createAndShowGamePanel(int difficulty) {
         JFrame frame = new JFrame("Hra");
@@ -118,7 +122,6 @@ public class Mapa {
         frame.pack();
         frame.setVisible(true);
 
-
         // Panel pro zobrazení informací o hráči
         JPanel playerInfoPanel = new JPanel();
         playerInfoPanel.setLayout(new GridLayout(6, 1));
@@ -142,11 +145,12 @@ public class Mapa {
 
         contentPane.add(playerInfoPanel, BorderLayout.EAST);
 
-        frame.setVisible(true);
+        // Přepnutí na celou obrazovku
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
+
     private static void displayTerritoryInfo(JPanel cell, int difficulty) {
-        // Otevření dialogového okna s informacemi o území
         JFrame infoFrame = new JFrame("Informace o území");
         infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         infoFrame.setSize(300, 200);
@@ -154,16 +158,12 @@ public class Mapa {
 
         JPanel infoPanel = new JPanel(new GridLayout(5, 1));
 
-        // Nadpis informace o území
         JLabel titleLabel = new JLabel("Informace o území");
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(titleLabel);
 
-        // Obrázek a informace o územích
         if (cell.getBackground().equals(Color.RED)) {
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: 1");
-            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(buildingLevelLabel);
+            // Obrana protivníka
             JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
@@ -171,8 +171,8 @@ public class Mapa {
             attackButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Při útoku předávejte aktuální hodnotu armády hráče a odpovídající label
-                    Attack.attack(cell, player, getTerritoryDefense(difficulty));
+                    int[] cellCoords = getCellCoordinates(cell);
+                    Attack.attack(cell, player, getTerritoryDefense(difficulty), cellCoords[0], cellCoords[1], cellCoords[0], cellCoords[1]);
                 }
             });
             infoPanel.add(attackButton);
@@ -184,19 +184,33 @@ public class Mapa {
             attackButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Při útoku se aktualizuje armáda
-                    Attack.attack(cell, player, getTerritoryDefense(difficulty));
-
+                    int[] cellCoords = getCellCoordinates(cell);
+                    Attack.attack(cell, player, getTerritoryDefense(difficulty), cellCoords[0], cellCoords[1], cellCoords[0], cellCoords[1]);
                 }
             });
             infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.GREEN)) {
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: 1");
+            int level = BuildingUpgrader.getBuildingLevel(cell);
+            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + level);
             buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(buildingLevelLabel);
-            JLabel earningLabel = new JLabel("Příjem: 50 peněz, 50 surovin, 10 armády");
+
+            String earningsText = "";
+            switch (level) {
+                case 1:
+                    earningsText = "Příjem: 50 peněz, 50 surovin, 10 armády";
+                    break;
+                case 2:
+                    earningsText = "Příjem: 60 peněz, 60 surovin, 20 armády";
+                    break;
+                case 3:
+                    earningsText = "Příjem: 75 peněz, 75 surovin, 30 armády";
+                    break;
+            }
+            JLabel earningLabel = new JLabel(earningsText);
             earningLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(earningLabel);
+
             JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
@@ -204,8 +218,8 @@ public class Mapa {
             upgradeButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Metoda pro vylepšení budovy
                     buildingUpgrader.upgradeBuilding(player, cell);
+                   // updatePlayerInfoPanel();
                 }
             });
             infoPanel.add(upgradeButton);
@@ -250,10 +264,36 @@ public class Mapa {
         return false;
     }
 
+    private static boolean isAdjacent(int attackerRow, int attackerCol, int defenderRow, int defenderCol, JPanel[][] grid) {
+        // Kontrola, zda jsou obě pole ve hráčově oblasti a zda je sousední pole zelené
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        // Pole musí být ve hráčově oblasti
+        if (attackerRow < 0 || attackerRow >= rows || attackerCol < 0 || attackerCol >= cols ||
+                defenderRow < 0 || defenderRow >= rows || defenderCol < 0 || defenderCol >= cols) {
+            return false;
+        }
+
+        // Pole musí být vedle sebe
+        if (Math.abs(attackerRow - defenderRow) + Math.abs(attackerCol - defenderCol) != 1) {
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+
+    private static int[] getCellCoordinates(JPanel cell) {
+        // Implementace získání souřadnic buňky z panelu (například pomocí layout manageru nebo mapování)
+        return new int[]{0, 0}; // Příklad návratových hodnot
+    }
+
+
     // Metoda pro ukončení kola
     private static void endTurn() {
-        // Zde by se prováděly operace spojené s ukončením kola, například resetování hodnot, tahy protihráče atd.
-        opponentMoves++;
-        System.out.println("Kolo ukončeno. Tahy protihráče: " + opponentMoves);
+
     }
 }

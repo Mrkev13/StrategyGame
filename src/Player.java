@@ -23,6 +23,7 @@ public class Player {
             }
         }
 
+        //region get set
         public int getMoney() {
             return money;
         }
@@ -46,4 +47,5 @@ public class Player {
     public void setArmy(int army) {
         this.army = army;
     }
+    //endregion
 }
