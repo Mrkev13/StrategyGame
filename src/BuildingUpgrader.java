@@ -7,15 +7,19 @@ class BuildingUpgrader {
     public static final int UPGRADE_COST_LEVEL_3 = 150;
     public static final int UPGRADE_ARMY_LEVEL_2 = 50;
     public static final int UPGRADE_ARMY_LEVEL_3 = 75;
+    public static final int UPGRADE_RESOURCE_LEVEL_2 = 100;
+    public static final int UPGRADE_RESOURCE_LEVEL_3 = 150;
 
     public static void upgradeBuilding(Player player, JPanel cell) {
         int currentLevel = getBuildingLevel(cell);
         if (currentLevel < MAX_BUILDING_LEVEL) {
             int upgradeCost = getUpgradeCost(currentLevel);
             int armyCost = getUpgradeArmyCost(currentLevel);
-            if (player.getMoney() >= upgradeCost && player.getArmy() >= armyCost) {
+            int resourceCost = getUpgradeResourceCost(currentLevel); // Přidáno
+            if (player.getMoney() >= upgradeCost && player.getArmy() >= armyCost && player.getResources() >= resourceCost) { // Upraveno
                 player.setMoney(player.getMoney() - upgradeCost);
                 player.setArmy(player.getArmy() - armyCost);
+                player.setResources(player.getResources() - resourceCost); // Přidáno
                 setBuildingLevel(cell, currentLevel + 1);
                 JOptionPane.showMessageDialog(null, "Budova byla úspěšně vylepšena.");
             } else {
@@ -26,15 +30,16 @@ class BuildingUpgrader {
         }
     }
 
+
     public static int getBuildingLevel(JPanel cell) {
         // Implementace získání úrovně budovy z buňky
-        // Toto je pouze příklad, musíte implementovat podle vaší struktury dat
+
         return 1;
     }
 
     public static void setBuildingLevel(JPanel cell, int level) {
         // Implementace nastavení úrovně budovy do buňky
-        // Toto je pouze příklad, musíte implementovat podle vaší struktury dat
+
     }
 
     public static int getUpgradeCost(int currentLevel) {
@@ -52,6 +57,16 @@ class BuildingUpgrader {
             return UPGRADE_ARMY_LEVEL_2;
         } else if (currentLevel == 2) {
             return UPGRADE_ARMY_LEVEL_3;
+        } else {
+            return 0; // Max level
+        }
+    }
+
+    public static int getUpgradeResourceCost(int currentLevel) {
+        if (currentLevel == 1) {
+            return UPGRADE_RESOURCE_LEVEL_2;
+        } else if (currentLevel == 2) {
+            return UPGRADE_RESOURCE_LEVEL_3;
         } else {
             return 0; // Max level
         }
