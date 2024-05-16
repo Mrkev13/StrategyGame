@@ -87,17 +87,20 @@ public class Mapa {
         // Panel pro herní pole
         JPanel gamePanel = new JPanel(new GridLayout(10, 10));
         gamePanel.setPreferredSize(new Dimension(1000, 1000)); // Zvětšíme rozměry herního pole
+        JPanel[][] grid = new JPanel[10][10]; // Přidání mřížky pro uchovávání referencí na buňky
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(100, 100)); // Zvětšíme rozměry čtverečků
 
                 // Obrázek a informace o územích
+                int row = i;
+                int col = j;
                 cell.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (SwingUtilities.isLeftMouseButton(e)) {
-                            displayTerritoryInfo(cell, difficulty);
+                            displayTerritoryInfo(cell, difficulty, playerInfoPanel, player, grid, row, col);
                         }
                     }
                 });
@@ -111,9 +114,9 @@ public class Mapa {
                 }
                 cell.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // zvýraznění čtverců
                 gamePanel.add(cell);
+                grid[i][j] = cell; // Přidání panelu do mřížky
             }
         }
-
         // Rozložení okna
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -133,7 +136,7 @@ public class Mapa {
         JButton endTurnButton = new JButton("Ukončit kolo");
         endTurnButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                endTurn();
+                endTurn(grid);
             }
         });
 
@@ -167,7 +170,7 @@ public class Mapa {
     }
 
 
-    private static void displayTerritoryInfo(JPanel cell, int difficulty) {
+    private static void displayTerritoryInfo(JPanel cell, int difficulty, JPanel playerInfoPanel, Player player, JPanel[][] grid, int row, int col) {
            JFrame infoFrame = new JFrame("Informace o území");
            infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
            infoFrame.setSize(300, 200);
@@ -190,9 +193,9 @@ public class Mapa {
                    @Override
                    public void actionPerformed(ActionEvent e) {
                        // Při útoku předávajte aktuální hodnotu obrany území
-                       Attack.attack(cell, player, getTerritoryDefense(difficulty));
+                       Attack.attack(cell, Mapa.player, getTerritoryDefense(difficulty));
                        // Aktualizace informací o hráči po provedení útoku
-                       updatePlayerInfoPanel(playerInfoPanel, player);
+                       updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
                        // Zavření okna s informacemi o území
                        infoFrame.dispose();
                    }
@@ -207,9 +210,9 @@ public class Mapa {
                    @Override
                    public void actionPerformed(ActionEvent e) {
                        // Při útoku předávajte aktuální hodnotu obrany území
-                       Attack.attack(cell, player, getTerritoryDefense(difficulty));
+                       Attack.attack(cell, Mapa.player, getTerritoryDefense(difficulty));
                        // Aktualizace informací o hráči po provedení útoku
-                       updatePlayerInfoPanel(playerInfoPanel, player);
+                       updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
                        // Zavření okna s informacemi o území
                        infoFrame.dispose();
                    }
@@ -240,9 +243,9 @@ public class Mapa {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Metoda pro vylepšení budovy
-                    buildingUpgrader.upgradeBuilding(player, cell);
+                    buildingUpgrader.upgradeBuilding(Mapa.player, cell);
                     // Aktualizace informací o hráči po provedení vylepšení
-                    updatePlayerInfoPanel(playerInfoPanel, player);
+                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
                     // Zavření okna s informacemi o území
                     infoFrame.dispose();
                 }
@@ -319,20 +322,39 @@ public class Mapa {
         return false;
     }
 
-//   public static boolean isAdjacent(int attackerRow, int attackerCol, int defenderRow, int defenderCol) {
-//       // Kontrola, zda jsou políčka vedle sebe
-//       return Math.abs(attackerRow - defenderRow) + Math.abs(attackerCol - defenderCol) == 1;
-//   }
+    // Metoda pro přičtení všech peněz, surovin a armády za všechna hráčova území a aktualizaci informací o hráči v panelu
+    private static void collectTerritoryEarnings(Player player, JPanel[][] grid) {
+        int totalMoney = 0;
+        int totalResources = 0;
+        int totalArmy = 0;
 
+        // Projít všechna hráčova území a přičíst příjem
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                JPanel cell = grid[i][j];
+                if (cell.getBackground().equals(Color.GREEN)) { // Pokud je to hráčovo území
+                    int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
+                    int[] earnings = getTerritoryEarning(buildingLevel, currentDifficulty);
+                    totalMoney += earnings[0];
+                    totalResources += earnings[1];
+                    totalArmy += earnings[2];
+                }
+            }
+        }
 
-//   private static int[] getCellCoordinates(JPanel cell) {
-//       // Implementace získání souřadnic buňky z panelu (například pomocí layout manageru nebo mapování)
-//       return new int[]{0, 0}; // Příklad návratových hodnot
-//   }
+        // Přičtení příjmu k aktuálním hodnotám hráče
+        player.setMoney(player.getMoney() + totalMoney);
+        player.setResources(player.getResources() + totalResources);
+        player.setArmy(player.getArmy() + totalArmy);
 
+        // Aktualizace informací o hráči v panelu
+        updatePlayerInfoPanel(playerInfoPanel, player);
+    }
 
     // Metoda pro ukončení kola
-    private static void endTurn() {
-
+    private static void endTurn(JPanel[][] grid) {
+        collectTerritoryEarnings(player, grid);
+        updatePlayerInfoPanel(playerInfoPanel, player);
     }
+
 }
