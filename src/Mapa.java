@@ -146,10 +146,32 @@ public class Mapa {
         playerInfoPanel.add(opponentMovesLabel);
         playerInfoPanel.add(endTurnButton);
 
+        JButton negotiatePeaceButton = new JButton("Sjednat mír");
+        negotiatePeaceButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int playerTerritories = countPlayerTerritories(grid);
+                PeaceNegotiation.attemptPeace(player, playerTerritories);
+            }
+        });
+        playerInfoPanel.add(negotiatePeaceButton);
+
         contentPane.add(playerInfoPanel, BorderLayout.EAST);
 
         // Přepnutí na celou obrazovku
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    // Metoda pro počítání hráčových území
+    private static int countPlayerTerritories(JPanel[][] grid) {
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j].getBackground().equals(Color.GREEN)) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     // Metoda pro aktualizaci informací o hráči v panelu
