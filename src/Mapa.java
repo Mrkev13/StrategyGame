@@ -377,6 +377,7 @@ public class Mapa {
     private static void endTurn(JPanel[][] grid) {
         collectTerritoryEarnings(player, grid);
         updatePlayerInfoPanel(playerInfoPanel, player);
+
     }
 
 }
