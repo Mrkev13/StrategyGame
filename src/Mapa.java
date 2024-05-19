@@ -14,6 +14,7 @@ public class Mapa {
     private static int opponentMoves = 0; // Počet tahů protihráče
     private static BuildingUpgrader buildingUpgrader = new BuildingUpgrader(); // Instance třídy BuildingUpgrader
     private static JPanel playerInfoPanel; // Panel pro zobrazení informací o hráči
+    private static Opponent opponent = new Opponent();
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -136,7 +137,7 @@ public class Mapa {
         JButton endTurnButton = new JButton("Ukončit kolo");
         endTurnButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                endTurn(grid);
+                endTurn(grid, opponent, player);
             }
         });
 
@@ -206,24 +207,28 @@ public class Mapa {
            infoPanel.add(titleLabel);
 
            // Obrázek a informace o územích
-           if (cell.getBackground().equals(Color.RED)) {
-               JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-               defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-               infoPanel.add(defenseLabel);
-               JButton attackButton = new JButton("Útok");
-               attackButton.addActionListener(new ActionListener() {
-                   @Override
-                   public void actionPerformed(ActionEvent e) {
-                       // Při útoku předávajte aktuální hodnotu obrany území
-                       Attack.attack(cell, Mapa.player, getTerritoryDefense(difficulty));
-                       // Aktualizace informací o hráči po provedení útoku
-                       updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                       // Zavření okna s informacemi o území
-                       infoFrame.dispose();
-                   }
-               });
-               infoPanel.add(attackButton);
-           } else if (cell.getBackground().equals(Color.WHITE)) {
+        if (cell.getBackground().equals(Color.RED)) {
+            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgrader.getBuildingLevel(cell));
+            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(buildingLevelLabel);
+            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(defenseLabel);
+
+            JButton attackButton = new JButton("Útok");
+            attackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Při útoku předávajte aktuální hodnotu obrany území
+                    Attack.attack(cell, Mapa.player, getTerritoryDefense(difficulty));
+                    // Aktualizace informací o hráči po provedení útoku
+                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                    // Zavření okna s informacemi o území
+                    infoFrame.dispose();
+                }
+            });
+            infoPanel.add(attackButton);
+        } else if (cell.getBackground().equals(Color.WHITE)) {
                JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
                defenseLabel.setHorizontalAlignment(JLabel.CENTER);
                infoPanel.add(defenseLabel);
@@ -373,11 +378,14 @@ public class Mapa {
         updatePlayerInfoPanel(playerInfoPanel, player);
     }
 
-    // Metoda pro ukončení kola
-    private static void endTurn(JPanel[][] grid) {
-        collectTerritoryEarnings(player, grid);
-        updatePlayerInfoPanel(playerInfoPanel, player);
 
+    // Metoda pro ukončení kola
+    private static void endTurn(JPanel[][] grid, Opponent opponent, Player player) {
+        collectTerritoryEarnings(player, grid);
+        opponent.performActions(grid, player);
+        opponentMoves++;
+        updatePlayerInfoPanel(playerInfoPanel, player);
     }
+
 
 }

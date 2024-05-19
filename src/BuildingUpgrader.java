@@ -30,13 +30,28 @@ class BuildingUpgrader {
         }
     }
 
+    public static void upgradeBuildingOpponent(Opponent opponent, JPanel cell) {
+        int currentLevel = getBuildingLevel(cell);
+        if (currentLevel < MAX_BUILDING_LEVEL) {
+            // Předpokládejme, že cena pro vylepšení protihráčovy budovy je stejná jako pro hráči
+            int upgradeCost = getUpgradeCost(currentLevel);
+            int armyCost = getUpgradeArmyCost(currentLevel);
+            int resourceCost = getUpgradeResourceCost(currentLevel);
+            if (opponent.getMoney() >= upgradeCost && opponent.getArmy() >= armyCost && opponent.getResources() >= resourceCost) {
+                opponent.setMoney(opponent.getMoney() - upgradeCost);
+                opponent.setArmy(opponent.getArmy() - armyCost);
+                opponent.setResources(opponent.getResources() - resourceCost);
+                setBuildingLevel(cell, currentLevel + 1);
+                JOptionPane.showMessageDialog(null, "Budova protihráče byla úspěšně vylepšena.");
+            }
+        }
+    }
 
     public static int getBuildingLevel(JPanel cell) {
         // Získání úrovně budovy z buňky
         if (cell.getClientProperty("BuildingLevel") != null) {
             return (int) cell.getClientProperty("BuildingLevel");
         } else {
-            // Pokud není nastavena žádná úroveň, vraťte výchozí hodnotu (například 1)
             return 1;
         }
     }
@@ -45,7 +60,6 @@ class BuildingUpgrader {
         // Nastavení úrovně budovy do buňky
         cell.putClientProperty("BuildingLevel", level);
     }
-
 
     public static int getUpgradeCost(int currentLevel) {
         if (currentLevel == 1) {
