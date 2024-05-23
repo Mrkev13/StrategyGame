@@ -11,8 +11,10 @@ public class PeaceNegotiation {
 
         if (roll <= peaceChance) {
             JOptionPane.showMessageDialog(null, "Mírová smlouva byla úspěšně sjednána!");
-            // Logika pro úspěšné uzavření mírové smlouvy
-            // Například ukončení hry nebo jiné akce
+            JOptionPane.showMessageDialog(null, "Válka skončila mírovou dohodou.");
+            JOptionPane.showMessageDialog(null, "Nicméně, neprátelská strana se stále ozbrojuje");
+            JOptionPane.showMessageDialog(null, "Takže si dejte pozor na další možnou válku.");
+            System.exit(0);
         } else {
             JOptionPane.showMessageDialog(null, "Mírová smlouva nebyla sjednána. Zkuste to znovu v dalším kole.");
         }
