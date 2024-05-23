@@ -70,8 +70,8 @@ public class Mapa {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(3, 1));
 
-        JLabel introLabel = new JLabel("<html><b>Úvod:</b><br>Vítejte v naší hře! Cílem hry je ... [popis cíle hry]<br><br><b>Pravidla:</b><br>1. ... [pravidlo 1]<br>2. ... [pravidlo 2]<br>3. ... [pravidlo 3]</html>");
-        JLabel actionsLabel = new JLabel("<html><b>Rady a typy:</b><br>- Můžete vylepšit kolik budov chcete.<br>- Můžete zautocit maximalne na 5 neutralnich a nepratelskych policek.<br>- Můžete zkusit sjednat mirovou smlouvu (čím více máte polic na mapě, tím větší máte šanci na úspěch).</html>");
+        JLabel introLabel = new JLabel("<html><b>Úvod:</b><br>Vítejte ve strategické válečné hře! Vaším cílem je ovládnout všechna území na mapě. Použijte svou strategii k rozšíření svého území a poražení protivníků.<br><br><b>Pravidla:</b><br>1. Každý hráč může útočit pouze na sousední území.<br>2. Každé území má určitou úroveň obrany, kterou musíte překonat.<br>3. Můžete vylepšovat své budovy pro zvýšení jejich obrany a produkce armády.<br>4. Hra končí, když jeden hráč ovládne všechna území nebo když všichni hráči uzavřou mírovou dohodu.<br>5. Pokud ztratíte všechna svá území, prohráváte hru.</html>");
+        JLabel actionsLabel = new JLabel("<html><b>Rady a tipy:</b><br>- Vylepšujte budovy strategicky, abyste měli silnější obranu a větší armádu.<br>- Plánujte své útoky tak, abyste nepřítele překvapili a využili slabých míst.<br>- Zkuste sjednat mírovou smlouvu, pokud vidíte, že nemůžete vyhrát boj.<br>- Mějte na paměti, že můžete zaútočit pouze na sousední území.<br>- Neustále sledujte své zdroje a udržujte rovnováhu mezi útokem a obranou.</html>");
 
         mainPanel.add(introLabel);
         mainPanel.add(actionsLabel);
@@ -220,30 +220,31 @@ public class Mapa {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Při útoku předávajte aktuální hodnotu obrany území
-                    Attack.attack(cell, Mapa.player, getTerritoryDefense(difficulty));
+                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
                     // Aktualizace informací o hráči po provedení útoku
                     updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
                     // Zavření okna s informacemi o území
                     infoFrame.dispose();
                 }
             });
+
             infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.WHITE)) {
                JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
                defenseLabel.setHorizontalAlignment(JLabel.CENTER);
                infoPanel.add(defenseLabel);
                JButton attackButton = new JButton("Útok");
-               attackButton.addActionListener(new ActionListener() {
-                   @Override
-                   public void actionPerformed(ActionEvent e) {
-                       // Při útoku předávajte aktuální hodnotu obrany území
-                       Attack.attack(cell, Mapa.player, getTerritoryDefense(difficulty));
-                       // Aktualizace informací o hráči po provedení útoku
-                       updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                       // Zavření okna s informacemi o území
-                       infoFrame.dispose();
-                   }
-               });
+            attackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Při útoku předávajte aktuální hodnotu obrany území
+                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
+                    // Aktualizace informací o hráči po provedení útoku
+                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                    // Zavření okna s informacemi o území
+                    infoFrame.dispose();
+                }
+            });
                infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.GREEN)) {
             // Pokud je to hráčovo území, zobrazí se úroveň budovy, příjem, obrana a tlačítko na vylepšení
