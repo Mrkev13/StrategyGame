@@ -17,15 +17,15 @@ public class Attack {
             }
         }
 
-        // Kontrola, zda je vybrané políčko vedle zeleného políčka
+        // Kontrola, zda je vybrané políčko vedle zeleného políčka nebo vedle zeleného políčka s textem
         boolean isAdjacentToGreen = false;
-        if (row > 0 && grid[row - 1][col].getBackground().equals(Color.GREEN)) {
+        if (row > 0 && (grid[row - 1][col].getBackground().equals(Color.GREEN) || isGreenWithText(grid[row - 1][col]))) {
             isAdjacentToGreen = true;
-        } else if (row < grid.length - 1 && grid[row + 1][col].getBackground().equals(Color.GREEN)) {
+        } else if (row < grid.length - 1 && (grid[row + 1][col].getBackground().equals(Color.GREEN) || isGreenWithText(grid[row + 1][col]))) {
             isAdjacentToGreen = true;
-        } else if (col > 0 && grid[row][col - 1].getBackground().equals(Color.GREEN)) {
+        } else if (col > 0 && (grid[row][col - 1].getBackground().equals(Color.GREEN) || isGreenWithText(grid[row][col - 1]))) {
             isAdjacentToGreen = true;
-        } else if (col < grid[row].length - 1 && grid[row][col + 1].getBackground().equals(Color.GREEN)) {
+        } else if (col < grid[row].length - 1 && (grid[row][col + 1].getBackground().equals(Color.GREEN) || isGreenWithText(grid[row][col + 1]))) {
             isAdjacentToGreen = true;
         }
 
@@ -45,5 +45,19 @@ public class Attack {
             // Pokud není vybrané políčko vedle zeleného políčka, zobrazte upozornění
             JOptionPane.showMessageDialog(null, "Nelze útočit na toto políčko, není vedle zeleného políčka.", "Upozornění", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    // Metoda pro kontrolu, zda je JPanel zelené a obsahuje text
+    private static boolean isGreenWithText(JPanel panel) {
+        Component[] components = panel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                if (panel.getBackground().equals(Color.GREEN) && label.getText() != null && !label.getText().isEmpty()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

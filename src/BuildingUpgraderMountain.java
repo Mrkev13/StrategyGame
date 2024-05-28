@@ -1,23 +1,27 @@
 import javax.swing.*;
 
-class BuildingUpgrader {
+class BuildingUpgraderMountain {
 
     public static final int MAX_BUILDING_LEVEL = 3;
 
-    public static final int UPGRADE_COST_LEVEL_2 = 300;
+    public static final int UPGRADE_COST_LEVEL_2 = 400;
     public static final int UPGRADE_COST_LEVEL_3 = 500;
 
-    public static final int UPGRADE_ARMY_LEVEL_2 = 50;
+    public static final int UPGRADE_ARMY_LEVEL_2 = 60;
     public static final int UPGRADE_ARMY_LEVEL_3 = 100;
 
-    public static final int UPGRADE_WOOD_LEVEL_2 = 30;
+    public static final int UPGRADE_WOOD_LEVEL_2 = 60;
     public static final int UPGRADE_WOOD_LEVEL_3 = 0;
 
-    public static final int UPGRADE_STONE_LEVEL_2 = 30;
+    public static final int UPGRADE_STONE_LEVEL_2 = 60;
     public static final int UPGRADE_STONE_LEVEL_3 = 50;
 
     public static final int UPGRADE_GOLD_LEVEL_2 = 0;
     public static final int UPGRADE_GOLD_LEVEL_3 = 80;
+
+
+
+
     public static void upgradeBuilding(Player player, JPanel cell) {
         int currentLevel = getBuildingLevel(cell);
         if (currentLevel < MAX_BUILDING_LEVEL) {
