@@ -107,6 +107,8 @@ public class Mapa {
                 mountain.setFont(new Font("Arial", Font.BOLD, 20));
                 JLabel river = new JLabel("Řeka");
                 river.setFont(new Font("Arial", Font.BOLD, 20));
+                JLabel basic = new JLabel("Basic");
+                basic.setFont(new Font("Arial", Font.BOLD, 20));
 
                 cell.setPreferredSize(new Dimension(100, 100)); // Zvětšíme rozměry čtverečků
 
@@ -124,15 +126,16 @@ public class Mapa {
 
                 if (isPlayerTerritory(i, j, difficulty)) {
                     cell.setBackground(Color.GREEN);
+                    cell.add(basic);
                 } else if (isOpponentTerritory(i, j, difficulty)) {
                     cell.setBackground(Color.RED);
-                } else if (isForestTerritory(i,j,difficulty)){
+                } else if (isForestTerritory(i, j, difficulty)) {
                     cell.setBackground(BROWN);
                     cell.add(forest);
-                } else if (isRiverTerritory(i,j,difficulty)) {
+                } else if (isRiverTerritory(i, j, difficulty)) {
                     cell.setBackground(Color.BLUE);
                     cell.add(river);
-                } else if (isMountainTerritory(i,j,difficulty)) {
+                } else if (isMountainTerritory(i, j, difficulty)) {
                     cell.setBackground(Color.GRAY);
                     cell.add(mountain);
                 } else {
@@ -153,7 +156,7 @@ public class Mapa {
 
         // Panel pro zobrazení informací o hráči
         playerInfoPanel = new JPanel();
-        playerInfoPanel.setLayout(new GridLayout(6, 1));
+        playerInfoPanel.setLayout(new GridLayout(8, 1));
         JLabel moneyLabel = new JLabel("Peníze: " + player.getMoney());
         JLabel woodLabel = new JLabel("Wood: " + player.getWood());
         JLabel stoneLabel = new JLabel("Stone: " + player.getStone());
@@ -204,49 +207,102 @@ public class Mapa {
         return count;
     }
 
-    // Metoda pro aktualizaci informací o hráči v panelu
     private static void updatePlayerInfoPanel(JPanel playerInfoPanel, Player player) {
-        // Aktualizace textu v labelu pro peníze, suroviny a armádu
-        JLabel moneyLabel = (JLabel) Mapa.playerInfoPanel.getComponent(0);
-        moneyLabel.setText("Money: " + player.getMoney());
+        boolean moneyLabelFound = false;
+        boolean woodLabelFound = false;
+        boolean stoneLabelFound = false;
+        boolean goldLabelFound = false;
+        boolean armyLabelFound = false;
 
-        JLabel woodLabel = (JLabel) Mapa.playerInfoPanel.getComponent(1);
-        woodLabel.setText("Wood: " + player.getWood());
+        Component[] components = playerInfoPanel.getComponents();
 
-        JLabel stoneLabel = (JLabel) Mapa.playerInfoPanel.getComponent(2);
-        woodLabel.setText("Stone: " + player.getStone());
+        for (Component component : components) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                String text = label.getText();
 
-        JLabel goldLabel = (JLabel) Mapa.playerInfoPanel.getComponent(3);
-        goldLabel.setText("Gold: " + player.getGold());
+                if (text.startsWith("Peníze:")) {
+                    label.setText("Peníze: " + player.getMoney());
+                    moneyLabelFound = true;
+                } else if (text.startsWith("Wood:")) {
+                    label.setText("Wood: " + player.getWood());
+                    woodLabelFound = true;
+                } else if (text.startsWith("Stone:")) {
+                    label.setText("Stone: " + player.getStone());
+                    stoneLabelFound = true;
+                } else if (text.startsWith("Gold:")) {
+                    label.setText("Gold: " + player.getGold());
+                    goldLabelFound = true;
+                } else if (text.startsWith("Armáda:")) {
+                    label.setText("Armáda: " + player.getArmy());
+                    armyLabelFound = true;
+                }
+            }
+        }
 
-        JLabel armyLabel = (JLabel) Mapa.playerInfoPanel.getComponent(4);
-        armyLabel.setText("Army: " + player.getArmy());
+        // Pokud JLabel nebyl nalezen, přidáme ho do panelu
+        if (!moneyLabelFound) {
+            playerInfoPanel.add(new JLabel("Peníze: " + player.getMoney()));
+        }
+        if (!woodLabelFound) {
+            playerInfoPanel.add(new JLabel("Wood: " + player.getWood()));
+        }
+        if (!stoneLabelFound) {
+            playerInfoPanel.add(new JLabel("Stone: " + player.getStone()));
+        }
+        if (!goldLabelFound) {
+            playerInfoPanel.add(new JLabel("Gold: " + player.getGold()));
+        }
+        if (!armyLabelFound) {
+            playerInfoPanel.add(new JLabel("Armáda: " + player.getArmy()));
+        }
 
+        playerInfoPanel.revalidate();
+        playerInfoPanel.repaint();
     }
+
+
 
 
     private static void displayTerritoryInfo(JPanel cell, int difficulty, JPanel playerInfoPanel, Player player, JPanel[][] grid, int row, int col) {
         final Color BROWN = new Color(165, 42, 42);
-        JLabel forest = new JLabel("Les");
-        forest.setFont(new Font("Arial", Font.BOLD, 20));
-        JLabel mountain = new JLabel("Hory");
-        mountain.setFont(new Font("Arial", Font.BOLD, 20));
-        JLabel river = new JLabel("Řeka");
-        river.setFont(new Font("Arial", Font.BOLD, 20));
-           JFrame infoFrame = new JFrame("Informace o území");
-           infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-           infoFrame.setSize(500, 200);
-           infoFrame.setLocationRelativeTo(cell);
+        JFrame infoFrame = new JFrame("Informace o území");
+        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        infoFrame.setSize(500, 200);
+        infoFrame.setLocationRelativeTo(cell);
 
-           JPanel infoPanel = new JPanel(new GridLayout(6, 1));
+        JPanel infoPanel = new JPanel(new GridLayout(6, 1));
 
-           // Nadpis informace o území
-           JLabel titleLabel = new JLabel("Informace o území");
-           titleLabel.setHorizontalAlignment(JLabel.CENTER);
-           infoPanel.add(titleLabel);
+        // Nadpis informace o území
+        JLabel titleLabel = new JLabel("Informace o území");
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(titleLabel);
 
-           // Obrázek a informace o územích
-        if (cell.getBackground().equals(Color.RED)) {
+        // Najít JLabel v JPanel pro identifikaci typu území
+        JLabel typeLabel = null;
+        for (Component comp : cell.getComponents()) {
+            if (comp instanceof JLabel) {
+                typeLabel = (JLabel) comp;
+                break;
+            }
+        }
+
+        if (typeLabel != null && cell.getBackground().equals(Color.GREEN)) {
+            String territoryType = typeLabel.getText();
+            switch (territoryType) {
+                case "Les":
+                    displayForestInfo(infoPanel, cell, difficulty);
+                    break;
+                case "Řeka":
+                    displayRiverInfo(infoPanel, cell, difficulty);
+                    break;
+                case "Hory":
+                    displayMountainInfo(infoPanel, cell, difficulty);
+                    break;
+                case "Basic":
+                    displayDefaultInfo(infoPanel, cell, difficulty);
+            }
+        } else if (cell.getBackground().equals(Color.RED)) {
             JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgrader.getBuildingLevel(cell));
             buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(buildingLevelLabel);
@@ -269,10 +325,10 @@ public class Mapa {
 
             infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.WHITE)) {
-               JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-               defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-               infoPanel.add(defenseLabel);
-               JButton attackButton = new JButton("Útok");
+            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+            infoPanel.add(defenseLabel);
+            JButton attackButton = new JButton("Útok");
             attackButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -284,7 +340,7 @@ public class Mapa {
                     infoFrame.dispose();
                 }
             });
-               infoPanel.add(attackButton);
+            infoPanel.add(attackButton);
         }  else if (cell.getBackground().equals(BROWN)) {
             JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -337,142 +393,170 @@ public class Mapa {
             });
             infoPanel.add(attackButton);
 
-        } else if (cell.getBackground().equals(Color.GREEN) && forest.getText().equals("Les")) {
 
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgraderForest.getBuildingLevel(cell));
-            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(buildingLevelLabel);
-
-            int buildingLevel = BuildingUpgraderForest.getBuildingLevel(cell);
-            int[] earnings = getTerritoryEarningForest(buildingLevel, difficulty);
-            JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, "  + earnings[4] + " army");
-            earningLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(earningLabel);
-
-            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(defenseLabel);
-
-            JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgraderForest.getUpgradeCost(BuildingUpgraderForest.getBuildingLevel(cell))+ " money, " + BuildingUpgraderForest.getUpgradeWoodCost(BuildingUpgraderForest.getBuildingLevel(cell)) + " wood, " + BuildingUpgraderForest.getUpgradeStoneCost(BuildingUpgraderForest.getBuildingLevel(cell)) + " stone, " + BuildingUpgraderForest.getUpgradeGoldCost(BuildingUpgraderForest.getBuildingLevel(cell)) + " gold, " + BuildingUpgraderForest.getUpgradeArmyCost(BuildingUpgraderForest.getBuildingLevel(cell)) + " army");
-            upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(upgradeCostLabel);
-
-            JButton upgradeButton = new JButton("Vylepšit");
-            upgradeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Metoda pro vylepšení budovy
-                    buildingUpgrader.upgradeBuilding(Mapa.player, cell);
-                    // Aktualizace informací o hráči po provedení vylepšení
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Zavření okna s informacemi o území
-                    infoFrame.dispose();
-                }
-            });
-            infoPanel.add(upgradeButton);
-        } else if (cell.getBackground().equals(Color.BLUE) && forest.getText().equals("Řeka")) {
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgraderRiver.getBuildingLevel(cell));
-            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(buildingLevelLabel);
-
-            int buildingLevel = BuildingUpgraderRiver.getBuildingLevel(cell);
-            int[] earnings = getTerritoryEarningRiver(buildingLevel, difficulty);
-            JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, "  + earnings[4] + " army");
-            earningLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(earningLabel);
-
-            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(defenseLabel);
-
-            JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgraderRiver.getUpgradeCost(BuildingUpgraderRiver.getBuildingLevel(cell))+ " money, " + BuildingUpgraderRiver.getUpgradeWoodCost(BuildingUpgraderRiver.getBuildingLevel(cell)) + " wood, " + BuildingUpgraderRiver.getUpgradeStoneCost(BuildingUpgraderRiver.getBuildingLevel(cell)) + " stone, " + BuildingUpgraderRiver.getUpgradeGoldCost(BuildingUpgraderRiver.getBuildingLevel(cell)) + " gold, " + BuildingUpgraderRiver.getUpgradeArmyCost(BuildingUpgraderRiver.getBuildingLevel(cell)) + " army");
-            upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(upgradeCostLabel);
-
-            JButton upgradeButton = new JButton("Vylepšit");
-            upgradeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Metoda pro vylepšení budovy
-                    buildingUpgrader.upgradeBuilding(Mapa.player, cell);
-                    // Aktualizace informací o hráči po provedení vylepšení
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Zavření okna s informacemi o území
-                    infoFrame.dispose();
-                }
-            });
-            infoPanel.add(upgradeButton);
-
-        } else if (cell.getBackground().equals(Color.GRAY) && forest.getText().equals("Hory")){
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgraderMountain.getBuildingLevel(cell));
-            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(buildingLevelLabel);
-
-            int buildingLevel = BuildingUpgraderMountain.getBuildingLevel(cell);
-            int[] earnings = getTerritoryEarningMountain(buildingLevel, difficulty);
-            JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, "  + earnings[4] + " army");
-            earningLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(earningLabel);
-
-            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(defenseLabel);
-
-            JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgraderMountain.getUpgradeCost(BuildingUpgraderMountain.getBuildingLevel(cell))+ " money, " + BuildingUpgraderMountain.getUpgradeWoodCost(BuildingUpgraderMountain.getBuildingLevel(cell)) + " wood, " + BuildingUpgraderMountain.getUpgradeStoneCost(BuildingUpgraderMountain.getBuildingLevel(cell)) + " stone, " + BuildingUpgraderMountain.getUpgradeGoldCost(BuildingUpgraderMountain.getBuildingLevel(cell)) + " gold, " + BuildingUpgraderMountain.getUpgradeArmyCost(BuildingUpgraderMountain.getBuildingLevel(cell)) + " army");
-            upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(upgradeCostLabel);
-
-            JButton upgradeButton = new JButton("Vylepšit");
-            upgradeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Metoda pro vylepšení budovy
-                    buildingUpgrader.upgradeBuilding(Mapa.player, cell);
-                    // Aktualizace informací o hráči po provedení vylepšení
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Zavření okna s informacemi o území
-                    infoFrame.dispose();
-                }
-            });
-            infoPanel.add(upgradeButton);
         }
-        else if (cell.getBackground().equals(Color.GREEN)) {
-            // Pokud je to hráčovo území, zobrazí se úroveň budovy, příjem, obrana a tlačítko na vylepšení
-            JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgrader.getBuildingLevel(cell));
-            buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(buildingLevelLabel);
 
-            int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
-            int[] earnings = getTerritoryEarning(buildingLevel, difficulty);
-            JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, "  + earnings[4] + " army");
-            earningLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(earningLabel);
-
-            JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
-            defenseLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(defenseLabel);
-
-            JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgrader.getUpgradeCost(BuildingUpgrader.getBuildingLevel(cell))+ " money, " + BuildingUpgrader.getUpgradeWoodCost(BuildingUpgrader.getBuildingLevel(cell)) + " wood, " + BuildingUpgrader.getUpgradeStoneCost(BuildingUpgrader.getBuildingLevel(cell)) + " stone, " + BuildingUpgrader.getUpgradeGoldCost(BuildingUpgrader.getBuildingLevel(cell)) + " gold, " + BuildingUpgrader.getUpgradeArmyCost(BuildingUpgrader.getBuildingLevel(cell)) + " army");
-            upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
-            infoPanel.add(upgradeCostLabel);
-
-            JButton upgradeButton = new JButton("Vylepšit");
-            upgradeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Metoda pro vylepšení budovy
-                    buildingUpgrader.upgradeBuilding(Mapa.player, cell);
-                    // Aktualizace informací o hráči po provedení vylepšení
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Zavření okna s informacemi o území
-                    infoFrame.dispose();
-                }
-            });
-            infoPanel.add(upgradeButton);
-        }
         infoFrame.add(infoPanel);
         infoFrame.setVisible(true);
     }
+
+    private static void displayForestInfo(JPanel infoPanel, JPanel cell, int difficulty) {
+        JFrame infoFrame = new JFrame("Informace o území");
+        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        infoFrame.setSize(500, 200);
+        infoFrame.setLocationRelativeTo(cell);
+        // Kód pro zobrazení informací o lesním území
+        JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgraderForest.getBuildingLevel(cell));
+        buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(buildingLevelLabel);
+
+        int buildingLevel = BuildingUpgraderForest.getBuildingLevel(cell);
+        int[] earnings = getTerritoryEarningForest(buildingLevel, difficulty);
+        JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, " + earnings[4] + " army");
+        earningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(earningLabel);
+
+        JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+        defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(defenseLabel);
+
+        JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgraderForest.getUpgradeCost(buildingLevel) + " money, " + BuildingUpgraderForest.getUpgradeWoodCost(buildingLevel) + " wood, " + BuildingUpgraderForest.getUpgradeStoneCost(buildingLevel) + " stone, " + BuildingUpgraderForest.getUpgradeGoldCost(buildingLevel) + " gold, " + BuildingUpgraderForest.getUpgradeArmyCost(buildingLevel) + " army");
+        upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(upgradeCostLabel);
+
+        JButton upgradeButton = new JButton("Vylepšit");
+        upgradeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Metoda pro vylepšení budovy
+                buildingUpgrader.upgradeBuilding(Mapa.player, cell);
+                // Aktualizace informací o hráči po provedení vylepšení
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Zavření okna s informacemi o území
+                infoFrame.dispose();
+            }
+        });
+        infoPanel.add(upgradeButton);
+    }
+
+    private static void displayRiverInfo(JPanel infoPanel, JPanel cell, int difficulty) {
+        JFrame infoFrame = new JFrame("Informace o území");
+        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        infoFrame.setSize(500, 200);
+        infoFrame.setLocationRelativeTo(cell);
+        // Kód pro zobrazení informací o říčním území
+        JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgraderRiver.getBuildingLevel(cell));
+        buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(buildingLevelLabel);
+
+        int buildingLevel = BuildingUpgraderRiver.getBuildingLevel(cell);
+        int[] earnings = getTerritoryEarningRiver(buildingLevel, difficulty);
+        JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, " + earnings[4] + " army");
+        earningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(earningLabel);
+
+        JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+        defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(defenseLabel);
+
+        JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgraderRiver.getUpgradeCost(buildingLevel) + " money, " + BuildingUpgraderRiver.getUpgradeWoodCost(buildingLevel) + " wood, " + BuildingUpgraderRiver.getUpgradeStoneCost(buildingLevel) + " stone, " + BuildingUpgraderRiver.getUpgradeGoldCost(buildingLevel) + " gold, " + BuildingUpgraderRiver.getUpgradeArmyCost(buildingLevel) + " army");
+        upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(upgradeCostLabel);
+
+        JButton upgradeButton = new JButton("Vylepšit");
+        upgradeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Metoda pro vylepšení budovy
+                buildingUpgrader.upgradeBuilding(Mapa.player, cell);
+                // Aktualizace informací o hráči po provedení vylepšení
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Zavření okna s informacemi o území
+                infoFrame.dispose();
+            }
+        });
+        infoPanel.add(upgradeButton);
+    }
+
+    private static void displayMountainInfo(JPanel infoPanel, JPanel cell, int difficulty) {
+        JFrame infoFrame = new JFrame("Informace o území");
+        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        infoFrame.setSize(500, 200);
+        infoFrame.setLocationRelativeTo(cell);
+        // Kód pro zobrazení informací o horském území
+        JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgraderMountain.getBuildingLevel(cell));
+        buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(buildingLevelLabel);
+
+        int buildingLevel = BuildingUpgraderMountain.getBuildingLevel(cell);
+        int[] earnings = getTerritoryEarningMountain(buildingLevel, difficulty);
+        JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, " + earnings[4] + " army");
+        earningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(earningLabel);
+
+        JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+        defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(defenseLabel);
+
+        JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgraderMountain.getUpgradeCost(buildingLevel) + " money, " + BuildingUpgraderMountain.getUpgradeWoodCost(buildingLevel) + " wood, " + BuildingUpgraderMountain.getUpgradeStoneCost(buildingLevel) + " stone, " + BuildingUpgraderMountain.getUpgradeGoldCost(buildingLevel) + " gold, " + BuildingUpgraderMountain.getUpgradeArmyCost(buildingLevel) + " army");
+        upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(upgradeCostLabel);
+
+        JButton upgradeButton = new JButton("Vylepšit");
+        upgradeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Metoda pro vylepšení budovy
+                buildingUpgrader.upgradeBuilding(Mapa.player, cell);
+                // Aktualizace informací o hráči po provedení vylepšení
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Zavření okna s informacemi o území
+                infoFrame.dispose();
+            }
+        });
+        infoPanel.add(upgradeButton);
+    }
+
+    private static void displayDefaultInfo(JPanel infoPanel, JPanel cell, int difficulty) {
+        JFrame infoFrame = new JFrame("Informace o území");
+        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        infoFrame.setSize(500, 200);
+        infoFrame.setLocationRelativeTo(cell);
+        // Kód pro zobrazení výchozích informací pro ostatní území
+        JLabel buildingLevelLabel = new JLabel("Úroveň budovy: " + BuildingUpgrader.getBuildingLevel(cell));
+        buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(buildingLevelLabel);
+
+        int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
+        int[] earnings = getTerritoryEarning(buildingLevel, difficulty);
+        JLabel earningLabel = new JLabel("Income: " + earnings[0] + " money, " + earnings[1] + " wood, " + earnings[2] + " stone, " + earnings[3] + " gold, " + earnings[4] + " army");
+        earningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(earningLabel);
+
+        JLabel defenseLabel = new JLabel("Obrana: " + getTerritoryDefense(difficulty));
+        defenseLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(defenseLabel);
+
+        JLabel upgradeCostLabel = new JLabel("Upgrade Cost: " + BuildingUpgrader.getUpgradeCost(buildingLevel) + " money, " + BuildingUpgrader.getUpgradeWoodCost(buildingLevel) + " wood, " + BuildingUpgrader.getUpgradeStoneCost(buildingLevel) + " stone, " + BuildingUpgrader.getUpgradeGoldCost(buildingLevel) + " gold, " + BuildingUpgrader.getUpgradeArmyCost(buildingLevel) + " army");
+        upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(upgradeCostLabel);
+
+        JButton upgradeButton = new JButton("Vylepšit");
+        upgradeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Metoda pro vylepšení budovy
+                buildingUpgrader.upgradeBuilding(Mapa.player, cell);
+                // Aktualizace informací o hráči po provedení vylepšení
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Zavření okna s informacemi o území
+                infoFrame.dispose();
+            }
+        });
+        infoPanel.add(upgradeButton);
+
+    }
+
 
     private static int[] getTerritoryEarning(int buildingLevel, int difficulty) {
         int[] earnings = new int[5];
@@ -682,56 +766,47 @@ public class Mapa {
 
 
     // Metoda pro přičtení všech peněz, surovin a armády za všechna hráčova území a aktualizaci informací o hráči v panelu
-    private static void collectTerritoryEarnings(Player player, JPanel[][] grid) {
+    private static void collectTerritoryEarnings(Player player, JPanel[][] grid, int currentDifficulty, JPanel playerInfoPanel) {
         int totalMoney = 0;
         int totalArmy = 0;
         int totalWood = 0;
         int totalStone = 0;
         int totalGold = 0;
 
-        JLabel forest = new JLabel("Les");
-        forest.setFont(new Font("Arial", Font.BOLD, 20));
-        JLabel mountain = new JLabel("Hory");
-        mountain.setFont(new Font("Arial", Font.BOLD, 20));
-        JLabel river = new JLabel("Řeka");
-        river.setFont(new Font("Arial", Font.BOLD, 20));
-
         // Projít všechna hráčova území a přičíst příjem
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 JPanel cell = grid[i][j];
-                if (cell.getBackground().equals(Color.GREEN) && forest.getText().equals("Les")){
-                    int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
-                    int[] earnings = getTerritoryEarningForest(buildingLevel, currentDifficulty);
-                    totalMoney += earnings[0];
-                    totalWood += earnings[1];
-                    totalStone += earnings[2];
-                    totalGold += earnings[3];
-                    totalArmy += earnings[4];
-                } else if (cell.getBackground().equals(Color.GREEN) && mountain.getText().equals("Hory") ) {
-                    int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
-                    int[] earnings = getTerritoryEarningMountain(buildingLevel, currentDifficulty);
-                    totalMoney += earnings[0];
-                    totalWood += earnings[1];
-                    totalStone += earnings[2];
-                    totalGold += earnings[3];
-                    totalArmy += earnings[4];
-                } else if (cell.getBackground().equals(Color.BLUE) && river.getText().equals("Řeka")) {
-                    int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
-                    int[] earnings = getTerritoryEarningRiver(buildingLevel, currentDifficulty);
-                    totalMoney += earnings[0];
-                    totalWood += earnings[1];
-                    totalStone += earnings[2];
-                    totalGold += earnings[3];
-                    totalArmy += earnings[4];
-                }else if (cell.getBackground().equals(Color.GREEN)) { // Pokud je to hráčovo území
-                    int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
-                    int[] earnings = getTerritoryEarning(buildingLevel, currentDifficulty);
-                    totalMoney += earnings[0];
-                    totalWood += earnings[1];
-                    totalStone += earnings[2];
-                    totalGold += earnings[3];
-                    totalArmy += earnings[4];
+
+                // Zkontrolovat, zda JPanel obsahuje komponenty
+                if (cell.getComponentCount() > 0 && cell.getComponent(0) instanceof JLabel) {
+                    String territoryType = ((JLabel) cell.getComponent(0)).getText(); // Předpokládáme, že JLabel je první komponenta
+
+                    if (cell.getBackground().equals(Color.GREEN)) {
+                        int buildingLevel = BuildingUpgrader.getBuildingLevel(cell);
+                        int[] earnings;
+
+                        switch (territoryType) {
+                            case "Les":
+                                earnings = getTerritoryEarningForest(buildingLevel, currentDifficulty);
+                                break;
+                            case "Hory":
+                                earnings = getTerritoryEarningMountain(buildingLevel, currentDifficulty);
+                                break;
+                            case "Řeka":
+                                earnings = getTerritoryEarningRiver(buildingLevel, currentDifficulty);
+                                break;
+                            default:
+                                earnings = getTerritoryEarning(buildingLevel, currentDifficulty);
+                                break;
+                        }
+
+                        totalMoney += earnings[0];
+                        totalWood += earnings[1];
+                        totalStone += earnings[2];
+                        totalGold += earnings[3];
+                        totalArmy += earnings[4];
+                    }
                 }
             }
         }
@@ -743,15 +818,15 @@ public class Mapa {
         player.setGold(player.getGold() + totalGold);
         player.setArmy(player.getArmy() + totalArmy);
 
-
         // Aktualizace informací o hráči v panelu
         updatePlayerInfoPanel(playerInfoPanel, player);
     }
 
 
+
     // Metoda pro ukončení kola
     private static void endTurn(JPanel[][] grid, Opponent opponent, Player player) {
-        collectTerritoryEarnings(player, grid);
+        collectTerritoryEarnings(player, grid, currentDifficulty, playerInfoPanel);
         opponent.performActions(grid, player);
         opponentMoves++;
         updatePlayerInfoPanel(playerInfoPanel, player);
@@ -760,6 +835,3 @@ public class Mapa {
 
 
 }
- /*
-
-*/

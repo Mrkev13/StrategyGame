@@ -88,7 +88,7 @@ public class Opponent {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (grid[i][j].getBackground().equals(Color.RED)) { // Území protivníka
-                    if (rand.nextInt(100) < 30) { // 10% šance na útok
+                    if (rand.nextInt(100) < 20) { // 10% šance na útok
                         attemptAttack(grid, i, j, player, rand);
                     }
                     if (rand.nextInt(100) < 40) { // 20% šance na vylepšení budovy
