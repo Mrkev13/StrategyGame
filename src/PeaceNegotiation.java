@@ -23,6 +23,8 @@ public class PeaceNegotiation {
             JOptionPane.showMessageDialog(null, "The war ended with a peace agreement.");
             JOptionPane.showMessageDialog(null, "However, the enemy side is still arming");
             JOptionPane.showMessageDialog(null, "So beware of another possible war.");
+            System.exit(0);
+
         } else {
             JOptionPane.showMessageDialog(null, "Peace negotiation failed.");
         }

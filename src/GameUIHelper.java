@@ -48,16 +48,17 @@ public class GameUIHelper {
             String territoryType = typeLabel.getText();
             switch (territoryType) {
                 case "Forest":
-                    displayForestInfo(infoPanel, cell, difficulty);
+                    displayForestInfo(infoPanel, cell, difficulty, infoFrame);
                     break;
                 case "River":
-                    displayRiverInfo(infoPanel, cell, difficulty);
+                    displayRiverInfo(infoPanel, cell, difficulty, infoFrame);
                     break;
                 case "Mountain":
-                    displayMountainInfo(infoPanel, cell, difficulty);
+                    displayMountainInfo(infoPanel, cell, difficulty, infoFrame);
                     break;
                 case "Basic":
-                    displayDefaultInfo(infoPanel, cell, difficulty);
+                    displayDefaultInfo(infoPanel, cell, difficulty, infoFrame);
+                    break;
             }
         } else if (cell.getBackground().equals(Color.RED)) {
             JLabel buildingLevelLabel = new JLabel("Building Level: " + BuildingUpgrader.getBuildingLevel(cell));
@@ -68,16 +69,13 @@ public class GameUIHelper {
             infoPanel.add(defenseLabel);
 
             JButton attackButton = new JButton("Attack");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Pass current territory defense value during attack
-                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
-                    // Update player information after attack
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Close territory information window
-                    infoFrame.dispose();
-                }
+            attackButton.addActionListener(e -> {
+                // Pass current territory defense value during attack
+                Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
+                // Update player information after attack
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Close territory information window
+                infoFrame.dispose();
             });
 
             infoPanel.add(attackButton);
@@ -86,16 +84,13 @@ public class GameUIHelper {
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
             JButton attackButton = new JButton("Attack");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Pass current territory defense value during attack
-                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
-                    // Update player information after attack
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Close territory information window
-                    infoFrame.dispose();
-                }
+            attackButton.addActionListener(e -> {
+                // Pass current territory defense value during attack
+                Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
+                // Update player information after attack
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Close territory information window
+                infoFrame.dispose();
             });
             infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(BROWN)) {
@@ -103,16 +98,13 @@ public class GameUIHelper {
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
             JButton attackButton = new JButton("Attack");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Pass current territory defense value during attack
-                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
-                    // Update player information after attack
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Close territory information window
-                    infoFrame.dispose();
-                }
+            attackButton.addActionListener(e -> {
+                // Pass current territory defense value during attack
+                Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
+                // Update player information after attack
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Close territory information window
+                infoFrame.dispose();
             });
             infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.BLUE)) {
@@ -120,16 +112,13 @@ public class GameUIHelper {
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
             JButton attackButton = new JButton("Attack");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Pass current territory defense value during attack
-                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
-                    // Update player information after attack
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Close territory information window
-                    infoFrame.dispose();
-                }
+            attackButton.addActionListener(e -> {
+                // Pass current territory defense value during attack
+                Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
+                // Update player information after attack
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Close territory information window
+                infoFrame.dispose();
             });
             infoPanel.add(attackButton);
         } else if (cell.getBackground().equals(Color.GRAY)) {
@@ -137,16 +126,13 @@ public class GameUIHelper {
             defenseLabel.setHorizontalAlignment(JLabel.CENTER);
             infoPanel.add(defenseLabel);
             JButton attackButton = new JButton("Attack");
-            attackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Pass current territory defense value during attack
-                    Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
-                    // Update player information after attack
-                    updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                    // Close territory information window
-                    infoFrame.dispose();
-                }
+            attackButton.addActionListener(e -> {
+                // Pass current territory defense value during attack
+                Attack.attack(grid, cell, Mapa.player, getTerritoryDefense(difficulty));
+                // Update player information after attack
+                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
+                // Close territory information window
+                infoFrame.dispose();
             });
             infoPanel.add(attackButton);
         }
@@ -161,13 +147,9 @@ public class GameUIHelper {
      * @param infoPanel   The panel displaying the information.
      * @param cell        The cell representing the territory.
      * @param difficulty  The difficulty level.
+     * @param infoFrame   The frame displaying territory information
      */
-    private static void displayForestInfo(JPanel infoPanel, JPanel cell, int difficulty) {
-        JFrame infoFrame = new JFrame("Territory Information");
-        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        infoFrame.setSize(500, 200);
-        infoFrame.setLocationRelativeTo(cell);
-        // Code to display forest territory information
+    private static void displayForestInfo(JPanel infoPanel, JPanel cell, int difficulty, JFrame infoFrame) {
         JLabel buildingLevelLabel = new JLabel("Building Level: " + BuildingUpgraderForest.getBuildingLevel(cell));
         buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(buildingLevelLabel);
@@ -187,16 +169,11 @@ public class GameUIHelper {
         infoPanel.add(upgradeCostLabel);
 
         JButton upgradeButton = new JButton("Upgrade");
-        upgradeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Method to upgrade the building
-                BuildingUpgraderForest.upgradeBuilding(Mapa.player, cell);
-                // Update player information after upgrading
-                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                // Close territory information window
-                infoFrame.dispose();
-            }
+        upgradeButton.addActionListener(e -> {
+            // Method to upgrade the building
+            BuildingUpgraderForest.upgradeBuilding(Mapa.player, cell, infoFrame);
+            // Update player information after upgrading
+            updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
         });
         infoPanel.add(upgradeButton);
     }
@@ -207,13 +184,9 @@ public class GameUIHelper {
      * @param infoPanel   The panel displaying the information.
      * @param cell        The cell representing the territory.
      * @param difficulty  The difficulty level.
+     * @param infoFrame   The frame displaying territory information
      */
-    private static void displayRiverInfo(JPanel infoPanel, JPanel cell, int difficulty) {
-        JFrame infoFrame = new JFrame("Territory Information");
-        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        infoFrame.setSize(500, 200);
-        infoFrame.setLocationRelativeTo(cell);
-        // Code to display river territory information
+    private static void displayRiverInfo(JPanel infoPanel, JPanel cell, int difficulty, JFrame infoFrame) {
         JLabel buildingLevelLabel = new JLabel("Building Level: " + BuildingUpgraderRiver.getBuildingLevel(cell));
         buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(buildingLevelLabel);
@@ -233,16 +206,11 @@ public class GameUIHelper {
         infoPanel.add(upgradeCostLabel);
 
         JButton upgradeButton = new JButton("Upgrade");
-        upgradeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Method to upgrade the building
-                BuildingUpgraderRiver.upgradeBuilding(Mapa.player, cell);
-                // Update player information after upgrading
-                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                // Close territory information window
-                infoFrame.dispose();
-            }
+        upgradeButton.addActionListener(e -> {
+            // Method to upgrade the building
+            BuildingUpgraderRiver.upgradeBuilding(Mapa.player, cell, infoFrame);
+            // Update player information after upgrading
+            updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
         });
         infoPanel.add(upgradeButton);
     }
@@ -253,13 +221,9 @@ public class GameUIHelper {
      * @param infoPanel   The panel displaying the information.
      * @param cell        The cell representing the territory.
      * @param difficulty  The difficulty level.
+     * @param infoFrame   The frame displaying territory information
      */
-    private static void displayMountainInfo(JPanel infoPanel, JPanel cell, int difficulty) {
-        JFrame infoFrame = new JFrame("Territory Information");
-        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        infoFrame.setSize(500, 200);
-        infoFrame.setLocationRelativeTo(cell);
-        // Code to display mountain territory information
+    private static void displayMountainInfo(JPanel infoPanel, JPanel cell, int difficulty, JFrame infoFrame) {
         JLabel buildingLevelLabel = new JLabel("Building Level: " + BuildingUpgraderMountain.getBuildingLevel(cell));
         buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(buildingLevelLabel);
@@ -279,16 +243,11 @@ public class GameUIHelper {
         infoPanel.add(upgradeCostLabel);
 
         JButton upgradeButton = new JButton("Upgrade");
-        upgradeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Method to upgrade the building
-                BuildingUpgraderMountain.upgradeBuilding(Mapa.player, cell);
-                // Update player information after upgrading
-                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                // Close territory information window
-                infoFrame.dispose();
-            }
+        upgradeButton.addActionListener(e -> {
+            // Method to upgrade the building
+            BuildingUpgraderMountain.upgradeBuilding(Mapa.player, cell, infoFrame);
+            // Update player information after upgrading
+            updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
         });
         infoPanel.add(upgradeButton);
     }
@@ -299,13 +258,9 @@ public class GameUIHelper {
      * @param infoPanel   The panel displaying the information.
      * @param cell        The cell representing the territory.
      * @param difficulty  The difficulty level.
+     * @param infoFrame   The frame displaying territory information
      */
-    private static void displayDefaultInfo(JPanel infoPanel, JPanel cell, int difficulty) {
-        JFrame infoFrame = new JFrame("Territory Information");
-        infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        infoFrame.setSize(500, 200);
-        infoFrame.setLocationRelativeTo(cell);
-        // Code to display default information for other territories
+    private static void displayDefaultInfo(JPanel infoPanel, JPanel cell, int difficulty, JFrame infoFrame) {
         JLabel buildingLevelLabel = new JLabel("Building Level: " + BuildingUpgrader.getBuildingLevel(cell));
         buildingLevelLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(buildingLevelLabel);
@@ -325,16 +280,11 @@ public class GameUIHelper {
         infoPanel.add(upgradeCostLabel);
 
         JButton upgradeButton = new JButton("Upgrade");
-        upgradeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Method to upgrade the building
-                BuildingUpgrader.upgradeBuilding(Mapa.player, cell);
-                // Update player information after upgrading
-                updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
-                // Close territory information window
-                infoFrame.dispose();
-            }
+        upgradeButton.addActionListener(e -> {
+            // Method to upgrade the building
+            BuildingUpgrader.upgradeBuilding(Mapa.player, cell, infoFrame);
+            // Update player information after upgrading
+            updatePlayerInfoPanel(Mapa.playerInfoPanel, Mapa.player);
         });
         infoPanel.add(upgradeButton);
     }
@@ -384,8 +334,6 @@ public class GameUIHelper {
                 }
             }
         }
-
-
 
         playerInfoPanel.revalidate();
         playerInfoPanel.repaint();

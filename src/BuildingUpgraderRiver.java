@@ -28,7 +28,7 @@ class BuildingUpgraderRiver {
      * @param player the player who wants to upgrade the building
      * @param cell the cell containing the building to be upgraded
      */
-    public static void upgradeBuilding(Player player, JPanel cell) {
+    public static void upgradeBuilding(Player player, JPanel cell, JFrame infoFrame) {
         int currentLevel = getBuildingLevel(cell);
         if (currentLevel < MAX_BUILDING_LEVEL) {
             int upgradeCost = getUpgradeCost(currentLevel);
@@ -45,6 +45,7 @@ class BuildingUpgraderRiver {
                 player.setGold(player.getGold() - goldCost);
                 setBuildingLevel(cell, currentLevel + 1);
                 JOptionPane.showMessageDialog(null, "Building successfully upgraded.");
+                infoFrame.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Not enough resources to upgrade the building.");
             }
