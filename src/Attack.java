@@ -73,7 +73,7 @@ public class Attack {
             }
         } else {
             // Display a warning message if the selected territory is not adjacent to a green territory
-            JOptionPane.showMessageDialog(null, "Cannot attack this territory, it is not adjacent to a green territory.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Cannot attack this territory, it is either too far or diagonally positioned from a green territory.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 

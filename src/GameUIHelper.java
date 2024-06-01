@@ -28,7 +28,7 @@ public class GameUIHelper {
         infoFrame.setSize(500, 200);
         infoFrame.setLocationRelativeTo(cell);
 
-        JPanel infoPanel = new JPanel(new GridLayout(6, 1));
+        JPanel infoPanel = new JPanel(new GridLayout(7, 1));
 
         // Title for territory information
         JLabel titleLabel = new JLabel("Territory Information");
@@ -168,6 +168,11 @@ public class GameUIHelper {
         upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(upgradeCostLabel);
 
+        int[] nextLevelEarnings = TerritoryEarning.getTerritoryEarningForest(buildingLevel + 1, difficulty);
+        JLabel nextLevelEarningLabel = new JLabel("Next Level Income: " + nextLevelEarnings[0] + " money, " + nextLevelEarnings[1] + " wood, " + nextLevelEarnings[2] + " stone, " + nextLevelEarnings[3] + " gold, " + nextLevelEarnings[4] + " army");
+        nextLevelEarningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(nextLevelEarningLabel);
+
         JButton upgradeButton = new JButton("Upgrade");
         upgradeButton.addActionListener(e -> {
             // Method to upgrade the building
@@ -177,6 +182,7 @@ public class GameUIHelper {
         });
         infoPanel.add(upgradeButton);
     }
+
 
     /**
      * Displays information about a river territory.
@@ -205,6 +211,11 @@ public class GameUIHelper {
         upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(upgradeCostLabel);
 
+        int[] nextLevelEarnings = TerritoryEarning.getTerritoryEarningRiver(buildingLevel + 1, difficulty);
+        JLabel nextLevelEarningLabel = new JLabel("Next Level Income: " + nextLevelEarnings[0] + " money, " + nextLevelEarnings[1] + " wood, " + nextLevelEarnings[2] + " stone, " + nextLevelEarnings[3] + " gold, " + nextLevelEarnings[4] + " army");
+        nextLevelEarningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(nextLevelEarningLabel);
+
         JButton upgradeButton = new JButton("Upgrade");
         upgradeButton.addActionListener(e -> {
             // Method to upgrade the building
@@ -214,6 +225,7 @@ public class GameUIHelper {
         });
         infoPanel.add(upgradeButton);
     }
+
 
     /**
      * Displays information about a mountain territory.
@@ -242,6 +254,11 @@ public class GameUIHelper {
         upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(upgradeCostLabel);
 
+        int[] nextLevelEarnings = TerritoryEarning.getTerritoryEarningMountain(buildingLevel + 1, difficulty);
+        JLabel nextLevelEarningLabel = new JLabel("Next Level Income: " + nextLevelEarnings[0] + " money, " + nextLevelEarnings[1] + " wood, " + nextLevelEarnings[2] + " stone, " + nextLevelEarnings[3] + " gold, " + nextLevelEarnings[4] + " army");
+        nextLevelEarningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(nextLevelEarningLabel);
+
         JButton upgradeButton = new JButton("Upgrade");
         upgradeButton.addActionListener(e -> {
             // Method to upgrade the building
@@ -251,6 +268,7 @@ public class GameUIHelper {
         });
         infoPanel.add(upgradeButton);
     }
+
 
     /**
      * Displays default information for other territories.
@@ -279,6 +297,11 @@ public class GameUIHelper {
         upgradeCostLabel.setHorizontalAlignment(JLabel.CENTER);
         infoPanel.add(upgradeCostLabel);
 
+        int[] nextLevelEarnings = TerritoryEarning.getTerritoryEarning(buildingLevel + 1, difficulty);
+        JLabel nextLevelEarningLabel = new JLabel("Next Level Income: " + nextLevelEarnings[0] + " money, " + nextLevelEarnings[1] + " wood, " + nextLevelEarnings[2] + " stone, " + nextLevelEarnings[3] + " gold, " + nextLevelEarnings[4] + " army");
+        nextLevelEarningLabel.setHorizontalAlignment(JLabel.CENTER);
+        infoPanel.add(nextLevelEarningLabel);
+
         JButton upgradeButton = new JButton("Upgrade");
         upgradeButton.addActionListener(e -> {
             // Method to upgrade the building
@@ -289,7 +312,7 @@ public class GameUIHelper {
         infoPanel.add(upgradeButton);
     }
 
-    // Additional helper methods
+
 
     public static int getTerritoryDefense(int difficulty) {
         if (difficulty == Mapa.EASY) {

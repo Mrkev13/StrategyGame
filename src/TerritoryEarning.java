@@ -30,9 +30,9 @@ public class TerritoryEarning {
             }
         } else if (buildingLevel == 3) {
             if (difficulty == Mapa.EASY) {
-                earnings = new int[]{40, 0, 0, 0, 20}; // Level 3 on easy difficulty
+                earnings = new int[]{45, 0, 0, 0, 35}; // Level 3 on easy difficulty
             } else if (difficulty == Mapa.MEDIUM) {
-                earnings = new int[]{35, 0, 0, 0, 15}; // Level 3 on medium difficulty
+                earnings = new int[]{40, 0, 0, 0, 20}; // Level 3 on medium difficulty
             } else if (difficulty == Mapa.HARD) {
                 earnings = new int[]{30, 0, 0, 0, 15}; // Level 3 on hard difficulty
             }
@@ -67,11 +67,11 @@ public class TerritoryEarning {
             }
         } else if (buildingLevel == 3) {
             if (difficulty == Mapa.EASY) {
-                earnings = new int[]{0, 30, 0, 0, 0}; // Level 3 on easy difficulty
+                earnings = new int[]{0, 35, 0, 0, 0}; // Level 3 on easy difficulty
             } else if (difficulty == Mapa.MEDIUM) {
-                earnings = new int[]{0, 25, 0, 0, 0}; // Level 3 on medium difficulty
+                earnings = new int[]{0, 30, 0, 0, 0}; // Level 3 on medium difficulty
             } else if (difficulty == Mapa.HARD) {
-                earnings = new int[]{0, 20, 0, 0, 0}; // Level 3 on hard difficulty
+                earnings = new int[]{0, 25, 0, 0, 0}; // Level 3 on hard difficulty
             }
         }
         return earnings;
@@ -104,11 +104,11 @@ public class TerritoryEarning {
             }
         } else if (buildingLevel == 3) {
             if (difficulty == Mapa.EASY) {
-                earnings = new int[]{0, 0, 0, 25, 0}; // Level 3 on easy difficulty
+                earnings = new int[]{0, 0, 0, 30, 0}; // Level 3 on easy difficulty
             } else if (difficulty == Mapa.MEDIUM) {
-                earnings = new int[]{0, 0, 0, 20, 0}; // Level 3 on medium difficulty
+                earnings = new int[]{0, 0, 0, 25, 0}; // Level 3 on medium difficulty
             } else if (difficulty == Mapa.HARD) {
-                earnings = new int[]{0, 0, 0, 15, 0}; // Level 3 on hard difficulty
+                earnings = new int[]{0, 0, 0, 20, 0}; // Level 3 on hard difficulty
             }
         }
         return earnings;
@@ -141,11 +141,11 @@ public class TerritoryEarning {
             }
         } else if (buildingLevel == 3) {
             if (difficulty == Mapa.EASY) {
-                earnings = new int[]{0, 0, 30, 0, 0}; // Level 3 on easy difficulty
+                earnings = new int[]{0, 0, 35, 0, 0}; // Level 3 on easy difficulty
             } else if (difficulty == Mapa.MEDIUM) {
-                earnings = new int[]{0, 0, 25, 0, 0}; // Level 3 on medium difficulty
+                earnings = new int[]{0, 0, 30, 0, 0}; // Level 3 on medium difficulty
             } else if (difficulty == Mapa.HARD) {
-                earnings = new int[]{0, 0, 20, 0, 0}; // Level 3 on hard difficulty
+                earnings = new int[]{0, 0, 25, 0, 0}; // Level 3 on hard difficulty
             }
         }
         return earnings;

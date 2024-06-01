@@ -146,7 +146,11 @@ public class Opponent {
      * @param player the player to be attacked
      */
     private void attackTerritory(JPanel[][] grid, int row, int col, Player player) {
+        if (grid[row][col].getBackground().equals(Color.GREEN)) {
+            JOptionPane.showMessageDialog(null, "Opponent attacked and took over your territory!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Opponent attacked and took over a territory!");
+        }
         grid[row][col].setBackground(Color.RED);
-        JOptionPane.showMessageDialog(null, "Opponent attacked and took over the territory!");
     }
 }
