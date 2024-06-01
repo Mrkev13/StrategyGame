@@ -11,20 +11,20 @@ public class Player {
     public Player() {
         // Set default values based on difficulty
         if (Mapa.currentDifficulty == Mapa.EASY) {
-            this.money = 1000000000;
-            this.army = 2000000;
-            this.stone = 01000000000;
-            this.gold = 1000000000;
-            this.wood = 010000000;
+            this.money = 1000;
+            this.army = 200;
+            this.stone = 0;
+            this.gold = 0;
+            this.wood = 0;
         } else if (Mapa.currentDifficulty == Mapa.MEDIUM) {
-            this.money = 800;
-            this.army = 150;
+            this.money = 1000;
+            this.army = 200;
             this.stone = 0;
             this.gold = 0;
             this.wood = 0;
         } else if (Mapa.currentDifficulty == Mapa.HARD) {
-            this.money = 600;
-            this.army = 100;
+            this.money = 1000;
+            this.army = 200;
             this.stone = 0;
             this.gold = 0;
             this.wood = 0;
