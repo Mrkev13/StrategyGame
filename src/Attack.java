@@ -1,12 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class for handling attack actions in the game.
+ */
 public class Attack {
-    // Metoda pro provedení útoku
+
+    /**
+     * Executes an attack on a specified territory.
+     *
+     * @param grid the game grid
+     * @param territoryPanel the panel representing the territory to attack
+     * @param player the player performing the attack
+     * @param defense the defense strength of the target territory
+     */
     public static void attack(JPanel[][] grid, JPanel territoryPanel, Player player, int defense) {
         int row = -1;
         int col = -1;
-        // Najít souřadnice vybraného políčka
+
+        // Find the coordinates of the selected territory
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] == territoryPanel) {
@@ -17,7 +29,7 @@ public class Attack {
             }
         }
 
-        // Kontrola, zda je vybrané políčko vedle zeleného políčka nebo vedle zeleného políčka s textem
+        // Check if the selected territory is adjacent to a green territory or a green territory with text
         boolean isAdjacentToGreen = false;
         if (row > 0 && (grid[row - 1][col].getBackground().equals(Color.GREEN) || isGreenWithText(grid[row - 1][col]))) {
             isAdjacentToGreen = true;
@@ -29,25 +41,30 @@ public class Attack {
             isAdjacentToGreen = true;
         }
 
-        // Pokud je vybrané políčko vedle zeleného políčka, můžete provést útok
+        // If the selected territory is adjacent to a green territory, proceed with the attack
         if (isAdjacentToGreen) {
             if (player.getArmy() >= defense) {
-                // Odebrat obranu z armády hráče
+                // Subtract defense from the player's army
                 player.setArmy(player.getArmy() - defense);
 
-                // Změna barvy území na zelenou (úspěšný útok)
+                // Change the territory color to green (successful attack)
                 territoryPanel.setBackground(Color.GREEN);
             } else {
-                // Zobrazení upozornění o nedostatečné armádě pro útok
-                JOptionPane.showMessageDialog(null, "Nemáte dostatečnou armádu pro útok!", "Upozornění", JOptionPane.WARNING_MESSAGE);
+                // Display a warning message if the player doesn't have enough army for the attack
+                JOptionPane.showMessageDialog(null, "You do not have enough army to attack!", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } else {
-            // Pokud není vybrané políčko vedle zeleného políčka, zobrazte upozornění
-            JOptionPane.showMessageDialog(null, "Nelze útočit na toto políčko, není vedle zeleného políčka.", "Upozornění", JOptionPane.WARNING_MESSAGE);
+            // Display a warning message if the selected territory is not adjacent to a green territory
+            JOptionPane.showMessageDialog(null, "Cannot attack this territory, it is not adjacent to a green territory.", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    // Metoda pro kontrolu, zda je JPanel zelené a obsahuje text
+    /**
+     * Checks if a JPanel is green and contains text.
+     *
+     * @param panel the JPanel to check
+     * @return true if the panel is green and contains text, false otherwise
+     */
     private static boolean isGreenWithText(JPanel panel) {
         Component[] components = panel.getComponents();
         for (Component component : components) {

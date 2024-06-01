@@ -1,13 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class responsible for checking and displaying the game result.
+ */
 public class GameResult {
 
+    /**
+     * Checks the game result and displays the appropriate message.
+     *
+     * @param grid     The game grid.
+     * @param player   The player.
+     * @param opponent The opponent.
+     */
     public static void checkGameResult(JPanel[][] grid, Player player, Opponent opponent) {
         boolean playerWins = true;
         boolean opponentWins = true;
 
-        // Kontrola, zda hráč získal všechna území protivníka
+        // Check if the player has acquired all opponent's territories
         for (JPanel[] row : grid) {
             for (JPanel cell : row) {
                 if (cell.getBackground().equals(Color.RED)) {
@@ -17,7 +27,7 @@ public class GameResult {
             }
         }
 
-        // Kontrola, zda protivník získal všechna území hráče
+        // Check if the opponent has acquired all player's territories
         for (JPanel[] row : grid) {
             for (JPanel cell : row) {
                 if (cell.getBackground().equals(Color.GREEN)) {
@@ -27,14 +37,13 @@ public class GameResult {
             }
         }
 
-        // Zobrazení výsledku
+        // Display the result
         if (playerWins) {
-            JOptionPane.showMessageDialog(null, "Gratulujeme! Vyhrál jsi hru!");
-            System.exit(0); // Konec programu
+            JOptionPane.showMessageDialog(null, "Congratulations! You won the game!");
+            System.exit(0); // End the program
         } else if (opponentWins) {
-            JOptionPane.showMessageDialog(null, "Bohužel, protivník získal všechna tvá území. Prohrál jsi hru.");
-            System.exit(0); // Konec programu
-
+            JOptionPane.showMessageDialog(null, "Unfortunately, the opponent has acquired all your territories. You lost the game.");
+            System.exit(0); // End the program
         }
     }
 }

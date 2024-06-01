@@ -1,5 +1,8 @@
 import javax.swing.*;
 
+/**
+ * Class for handling building upgrades in the game.
+ */
 class BuildingUpgraderRiver {
 
     public static final int MAX_BUILDING_LEVEL = 3;
@@ -19,9 +22,12 @@ class BuildingUpgraderRiver {
     public static final int UPGRADE_GOLD_LEVEL_2 = 0;
     public static final int UPGRADE_GOLD_LEVEL_3 = 90;
 
-
-
-
+    /**
+     * Upgrades the building for the player.
+     *
+     * @param player the player who wants to upgrade the building
+     * @param cell the cell containing the building to be upgraded
+     */
     public static void upgradeBuilding(Player player, JPanel cell) {
         int currentLevel = getBuildingLevel(cell);
         if (currentLevel < MAX_BUILDING_LEVEL) {
@@ -30,6 +36,7 @@ class BuildingUpgraderRiver {
             int woodCost = getUpgradeWoodCost(currentLevel);
             int stoneCost = getUpgradeStoneCost(currentLevel);
             int goldCost = getUpgradeGoldCost(currentLevel);
+
             if (player.getMoney() >= upgradeCost && player.getArmy() >= armyCost && player.getWood() >= woodCost && player.getStone() >= stoneCost && player.getGold() >= goldCost) {
                 player.setMoney(player.getMoney() - upgradeCost);
                 player.setArmy(player.getArmy() - armyCost);
@@ -37,19 +44,24 @@ class BuildingUpgraderRiver {
                 player.setStone(player.getStone() - stoneCost);
                 player.setGold(player.getGold() - goldCost);
                 setBuildingLevel(cell, currentLevel + 1);
-                JOptionPane.showMessageDialog(null, "Budova byla úspěšně vylepšena.");
+                JOptionPane.showMessageDialog(null, "Building successfully upgraded.");
             } else {
-                JOptionPane.showMessageDialog(null, "Nemáte dostatek zdrojů na vylepšení budovy.");
+                JOptionPane.showMessageDialog(null, "Not enough resources to upgrade the building.");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Budova je již na maximální úrovni.");
+            JOptionPane.showMessageDialog(null, "Building is already at the maximum level.");
         }
     }
 
+    /**
+     * Upgrades the building for the opponent.
+     *
+     * @param opponent the opponent whose building is to be upgraded
+     * @param cell the cell containing the building to be upgraded
+     */
     public static void upgradeBuildingOpponent(Opponent opponent, JPanel cell) {
         int currentLevel = getBuildingLevel(cell);
         if (currentLevel < MAX_BUILDING_LEVEL) {
-            // Předpokládejme, že cena pro vylepšení protihráčovy budovy je stejná jako pro hráči
             int upgradeCost = getUpgradeCost(currentLevel);
             int armyCost = getUpgradeArmyCost(currentLevel);
             int woodCost = getUpgradeWoodCost(currentLevel);
@@ -63,13 +75,18 @@ class BuildingUpgraderRiver {
                 opponent.setGold(opponent.getGold() - goldCost);
                 opponent.setStone(opponent.getStone() - stoneCost);
                 setBuildingLevel(cell, currentLevel + 1);
-                JOptionPane.showMessageDialog(null, "Budova protihráče byla úspěšně vylepšena.");
+                JOptionPane.showMessageDialog(null, "Opponent's building successfully upgraded.");
             }
         }
     }
 
+    /**
+     * Retrieves the current level of the building in the specified cell.
+     *
+     * @param cell the cell containing the building
+     * @return the current building level
+     */
     public static int getBuildingLevel(JPanel cell) {
-        // Získání úrovně budovy z buňky
         if (cell.getClientProperty("BuildingLevel") != null) {
             return (int) cell.getClientProperty("BuildingLevel");
         } else {
@@ -77,11 +94,22 @@ class BuildingUpgraderRiver {
         }
     }
 
+    /**
+     * Sets the level of the building in the specified cell.
+     *
+     * @param cell the cell containing the building
+     * @param level the new level to set
+     */
     public static void setBuildingLevel(JPanel cell, int level) {
-        // Nastavení úrovně budovy do buňky
         cell.putClientProperty("BuildingLevel", level);
     }
 
+    /**
+     * Retrieves the upgrade cost for the building based on its current level.
+     *
+     * @param currentLevel the current level of the building
+     * @return the cost to upgrade to the next level
+     */
     public static int getUpgradeCost(int currentLevel) {
         if (currentLevel == 1) {
             return UPGRADE_COST_LEVEL_2;
@@ -92,6 +120,12 @@ class BuildingUpgraderRiver {
         }
     }
 
+    /**
+     * Retrieves the army cost for the building upgrade based on its current level.
+     *
+     * @param currentLevel the current level of the building
+     * @return the army cost to upgrade to the next level
+     */
     public static int getUpgradeArmyCost(int currentLevel) {
         if (currentLevel == 1) {
             return UPGRADE_ARMY_LEVEL_2;
@@ -102,6 +136,12 @@ class BuildingUpgraderRiver {
         }
     }
 
+    /**
+     * Retrieves the stone cost for the building upgrade based on its current level.
+     *
+     * @param currentLevel the current level of the building
+     * @return the stone cost to upgrade to the next level
+     */
     public static int getUpgradeStoneCost(int currentLevel) {
         if (currentLevel == 1) {
             return UPGRADE_STONE_LEVEL_2;
@@ -112,6 +152,12 @@ class BuildingUpgraderRiver {
         }
     }
 
+    /**
+     * Retrieves the gold cost for the building upgrade based on its current level.
+     *
+     * @param currentLevel the current level of the building
+     * @return the gold cost to upgrade to the next level
+     */
     public static int getUpgradeGoldCost(int currentLevel) {
         if (currentLevel == 1) {
             return UPGRADE_GOLD_LEVEL_2;
@@ -122,6 +168,12 @@ class BuildingUpgraderRiver {
         }
     }
 
+    /**
+     * Retrieves the wood cost for the building upgrade based on its current level.
+     *
+     * @param currentLevel the current level of the building
+     * @return the wood cost to upgrade to the next level
+     */
     public static int getUpgradeWoodCost(int currentLevel) {
         if (currentLevel == 1) {
             return UPGRADE_WOOD_LEVEL_2;
@@ -131,5 +183,4 @@ class BuildingUpgraderRiver {
             return 0; // Max level
         }
     }
-
 }

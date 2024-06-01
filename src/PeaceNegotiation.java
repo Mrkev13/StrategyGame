@@ -1,22 +1,30 @@
 import javax.swing.*;
 import java.util.Random;
 
+/**
+ * Class responsible for handling peace negotiations.
+ */
 public class PeaceNegotiation {
-    private static final int BASE_PEACE_CHANCE = 1; // základní šance na mír je 1% za každé území
+    private static final int BASE_PEACE_CHANCE = 1; // Base peace chance is 1% per territory
 
+    /**
+     * Attempts to negotiate peace.
+     *
+     * @param player The player attempting peace.
+     * @param playerTerritories The number of territories the player owns.
+     */
     public static void attemptPeace(Player player, int playerTerritories) {
         int peaceChance = playerTerritories * BASE_PEACE_CHANCE;
         Random rand = new Random();
-        int roll = rand.nextInt(100) + 1; // hodnota od 1 do 100
+        int roll = rand.nextInt(100) + 1; // Value from 1 to 100
 
         if (roll <= peaceChance) {
-            JOptionPane.showMessageDialog(null, "Mírová smlouva byla úspěšně sjednána!");
-            JOptionPane.showMessageDialog(null, "Válka skončila mírovou dohodou.");
-            JOptionPane.showMessageDialog(null, "Nicméně, neprátelská strana se stále ozbrojuje");
-            JOptionPane.showMessageDialog(null, "Takže si dejte pozor na další možnou válku.");
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, "The peace treaty was successfully negotiated!");
+            JOptionPane.showMessageDialog(null, "The war ended with a peace agreement.");
+            JOptionPane.showMessageDialog(null, "However, the enemy side is still arming");
+            JOptionPane.showMessageDialog(null, "So beware of another possible war.");
         } else {
-            JOptionPane.showMessageDialog(null, "Mírová smlouva nebyla sjednána. Zkuste to znovu v dalším kole.");
+            JOptionPane.showMessageDialog(null, "Peace negotiation failed.");
         }
     }
 }
