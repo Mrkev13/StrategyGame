@@ -12,8 +12,9 @@ public class GameResult {
      * @param grid     The game grid.
      * @param player   The player.
      * @param opponent The opponent.
+     * @return
      */
-    public static void checkGameResult(JPanel[][] grid, Player player, Opponent opponent) {
+    public static boolean checkGameResult(JPanel[][] grid, Player player, Opponent opponent) {
         boolean playerWins = true;
         boolean opponentWins = true;
 
@@ -45,5 +46,6 @@ public class GameResult {
             JOptionPane.showMessageDialog(null, "Unfortunately, the opponent has acquired all your territories. You lost the game.");
             System.exit(0); // End the program
         }
+        return playerWins;
     }
 }

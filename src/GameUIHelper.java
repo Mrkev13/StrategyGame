@@ -291,7 +291,7 @@ public class GameUIHelper {
 
     // Additional helper methods
 
-    private static int getTerritoryDefense(int difficulty) {
+    public static int getTerritoryDefense(int difficulty) {
         if (difficulty == Mapa.EASY) {
             return 50;
         } else if (difficulty == MEDIUM) {

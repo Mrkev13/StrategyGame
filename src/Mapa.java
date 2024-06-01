@@ -189,7 +189,7 @@ public class Mapa {
      * @param grid the game grid
      * @return the number of player territories
      */
-    private static int countPlayerTerritories(JPanel[][] grid) {
+    public static int countPlayerTerritories(JPanel[][] grid) {
         int count = 0;
         for (JPanel[] panels : grid) {
             for (JPanel panel : panels) {
