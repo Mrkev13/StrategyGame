@@ -44,19 +44,28 @@ public class Attack {
         // If the selected territory is adjacent to a green territory, proceed with the attack
         if (isAdjacentToGreen) {
             if (player.getArmy() >= defense) {
-                if (territoryPanel.getBackground().equals(Color.WHITE)) {
-                    // Add "Basic" label to the panel
-                    JLabel basicLabel = new JLabel("Basic");
-                    basicLabel.setFont(new Font("Arial", Font.BOLD, 20));
-                    territoryPanel.add(basicLabel);
+                if (territoryPanel.getBackground().equals(Color.WHITE) || territoryPanel.getBackground().equals(Color.RED)) {
+                    // Check if the panel already has a label with text
+                    JLabel existingLabel = null;
+                    for (Component component : territoryPanel.getComponents()) {
+                        if (component instanceof JLabel) {
+                            existingLabel = (JLabel) component;
+                            break;
+                        }
+                    }
+
+                    // If no existing label is found, create a new one
+                    if (existingLabel == null) {
+                        JLabel basicLabel = new JLabel("Basic");
+                        basicLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                        territoryPanel.add(basicLabel);
+                    }
                 }
                 // Subtract defense from the player's army
                 player.setArmy(player.getArmy() - defense);
 
                 // Change the territory color to green (successful attack)
                 territoryPanel.setBackground(Color.GREEN);
-
-                // Check if the attacked panel was white
 
             } else {
                 // Display a warning message if the player doesn't have enough army for the attack

@@ -111,7 +111,7 @@ public class Opponent {
      */
     private void attemptAttack(JPanel[][] grid, int row, int col, Player player, Random rand) {
         final Color BROWN = new Color(165, 42, 42);
-        int attackChance = 60; // basic attack chance 60%
+        int attackChance = 55; // basic attack chance 55%
         int roll = rand.nextInt(100) + 1;
 
         if (roll <= attackChance) {
